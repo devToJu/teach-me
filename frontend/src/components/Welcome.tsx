@@ -20,7 +20,7 @@ export default function Welcome() {
                         Welcome to TEACH ME!
                     </Typography>
                     <Typography sx={{m: 2, textAlign: "center"}}>
-                        Deiner individuelle Lernplattform, mit der du von überall
+                        Deiner individuellen Lernplattform, mit der du von überall
                         deine Übungsaufgaben bearbeiten kannst.
                         <br/><br/>
                         Sei es von daheim aus, an deinem Notebook oder Tablet. Und auch von
