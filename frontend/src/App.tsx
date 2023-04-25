@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ResponsiveAppBar from "./components/navigation/ResponsiveAppBar";
+import Welcome from "./components/Welcome";
+import ResponsiveAppBarBottom from "./components/navigation/ResponsiveAppBarBottom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import UrlNotFound from "./components/UrlNotFound";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <>
+            <BrowserRouter>
+                <ResponsiveAppBar/>
+                <Routes>
+                    <Route path="/" element={<Welcome/>}/>
+                    <Route path="*" element={<UrlNotFound/>}/>
+                </Routes>
+                <ResponsiveAppBarBottom/>
+            </BrowserRouter>
+        </>
+    );
 }
 
 export default App;
