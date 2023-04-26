@@ -2,7 +2,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import {Typography} from "@mui/material";
 import React from "react";
 
-export default function Logo() {
+export default function LogoNarrow() {
     return (
         <>
             <SchoolIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>

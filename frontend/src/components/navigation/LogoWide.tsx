@@ -2,7 +2,7 @@ import SchoolIcon from "@mui/icons-material/School";
 import {Typography} from "@mui/material";
 import React from "react";
 
-export default function LogoCollapsed() {
+export default function LogoWide() {
     return (
         <>
             <SchoolIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
