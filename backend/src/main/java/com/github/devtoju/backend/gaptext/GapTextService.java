@@ -4,7 +4,7 @@ import com.github.devtoju.backend.gaptext.models.GapText;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
