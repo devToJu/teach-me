@@ -1,7 +1,7 @@
 package com.github.devtoju.backend.gaptext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.devtoju.backend.gaptext.models.GapText;
+import com.github.devtoju.backend.gaptext.models.GapTextContainer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class GapTextIntegrationTest {
+class GapTextContainerIntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -24,10 +24,10 @@ class GapTextIntegrationTest {
     ObjectMapper mapper;
 
     @Test
-    void getAllTexts_shouldReturnEmptyList_whenRepoIsEmpty() throws Exception {
-        String emptyListAsJson = mapper.writeValueAsString(Collections.<GapText>emptyList());
+    void getAllContainers_shouldReturnEmptyList_whenRepoIsEmpty() throws Exception {
+        String emptyListAsJson = mapper.writeValueAsString(Collections.<GapTextContainer>emptyList());
 
-        mockMvc.perform(get("/api/gaptext"))
+        mockMvc.perform(get("/api/gaptextcontainer"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(emptyListAsJson));
     }
