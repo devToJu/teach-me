@@ -40,8 +40,10 @@ export default function ApiFunctionsContextProvider(props: Props) {
 
     const gapTextFunctions = useMemo(() => ({
             getAllGapTextContainers: getAllGapTextContainers
-        }
-    ), []);
+        }),
+        // eslint-disable-next-line
+        []
+    );
 
     return (
         <ApiFunctionsContext.Provider value={gapTextFunctions}>
