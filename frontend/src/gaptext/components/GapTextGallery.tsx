@@ -1,21 +1,22 @@
-import {useContext} from "react";
+import React, {useContext} from "react";
 import {ApiFunctionsContext} from "../contexts/ApiFunctionsContext";
-import GapTextContainer from "./GapTextContainer";
+import {Container, Grid} from "@mui/material";
+import GapTextCard from "./GapTextCard";
 
 export default function GapTextGallery() {
-    const {getAllGapTexts} = useContext(ApiFunctionsContext)
+    const {getAllGapTextContainers} = useContext(ApiFunctionsContext)
 
     return (
-        <>
-            {
-                getAllGapTexts().map(
-                    gapText =>
-                        <GapTextContainer
-                            key={gapText.id}
-                            gapText={gapText}
-                        />
-                )
-            }
-        </>
+        <Container sx={{py: 8}} maxWidth="lg">
+            <Grid container spacing={4}>
+                {
+                    getAllGapTextContainers().map((gapText, index) =>
+                        <Grid item key={gapText.id} xs={12} sm={6} md={4}>
+                            <GapTextCard gapText={gapText} number={index + 1}/>
+                        </Grid>
+                    )
+                }
+            </Grid>
+        </Container>
     )
 }

@@ -1,15 +1,15 @@
-import {ReactElement, useEffect, useState} from "react";
+import {ReactElement, useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
 import {toast, ToastContainer} from "react-toastify";
-import {GapTextFunctions, ApiFunctionsContext} from "./ApiFunctionsContext"
+import {ApiFunctionsContext} from "./ApiFunctionsContext"
 
 type Props = {
     children: ReactElement
 }
 
 export default function ApiFunctionsContextProvider(props: Props) {
-    const [gapTexts, setGapTexts] = useState<GapTextContainerModel[]>([]);
+    const [gapTextContainers, setGapTextContainers] = useState<GapTextContainerModel[]>([]);
 
     const showError = (reason: any) => {
         if (reason.type === undefined)
@@ -19,24 +19,29 @@ export default function ApiFunctionsContextProvider(props: Props) {
                 ${reason.response.statusText} \n
                 ${reason.request.responseURL}`;
 
-        toast.error(msg, {theme: "dark"});
+        toast.error(msg);
     }
 
-    useEffect(() => loadAllGapTextsFromApi(), [])
+    useEffect(
+        () => loadAllGapTextContainersFromApi(),
+        // eslint-disable-next-line
+        []
+    )
 
-    function loadAllGapTextsFromApi(): void {
+    function loadAllGapTextContainersFromApi(): void {
         axios.get("/api/gaptextcontainer")
-            .then(response => setGapTexts(response.data))
+            .then(response => setGapTextContainers(response.data))
             .catch(reason => showError(reason))
     }
 
-    function getAllTapTexts(): GapTextContainerModel[] {
-        return gapTexts;
+    function getAllGapTextContainers(): GapTextContainerModel[] {
+        return gapTextContainers;
     }
 
-    const gapTextFunctions: GapTextFunctions = {
-        getAllGapTexts: getAllTapTexts
-    }
+    const gapTextFunctions = useMemo(() => ({
+            getAllGapTextContainers: getAllGapTextContainers
+        }
+    ), []);
 
     return (
         <ApiFunctionsContext.Provider value={gapTextFunctions}>

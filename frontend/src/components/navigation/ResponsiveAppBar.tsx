@@ -22,7 +22,7 @@ export default function ResponsiveAppBar() {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <LogoNarrow/>
+                    <LogoWide/>
                     <NavigationNarrow
                         anchorElNav={anchorElNav}
                         handleCloseNavMenu={handleCloseNavMenu}
@@ -33,7 +33,7 @@ export default function ResponsiveAppBar() {
                         handleCloseNavMenu={handleCloseNavMenu}
                         pages={pages}
                     />
-                    <LogoWide/>
+                    <LogoNarrow/>
                 </Toolbar>
             </Container>
         </AppBar>

@@ -5,17 +5,16 @@ import React from "react";
 export default function LogoWide() {
     return (
         <>
-            <SchoolIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
+            <SchoolIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
             <Typography
-                variant="h5"
+                variant="h6"
                 noWrap
                 component="a"
-                href=""
+                href="/"
                 sx={{
                     mr: 2,
-                    display: {xs: 'flex', md: 'none'},
-                    flexGrow: 1,
-                    fontFamily: "monospace",
+                    display: {xs: 'none', md: 'flex'},
+                    fontFamily: 'monospace',
                     fontWeight: 700,
                     letterSpacing: '.3rem',
                     color: 'inherit',

@@ -14,5 +14,4 @@ public class GapTextContainerService {
     public List<GapTextContainer> getAllContainers() {
         return gapTextContainerRepo.findAll();
     }
-
 }
