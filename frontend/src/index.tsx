@@ -3,16 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import ApiFunctionsContextProvider from "./gaptext/contexts/ApiFunctionsContextProvider";
+import GapTextContextProvider from "./gaptext/contexts/GapTextContextProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
-        <ApiFunctionsContextProvider>
+        <GapTextContextProvider>
             <App/>
-        </ApiFunctionsContextProvider>
+        </GapTextContextProvider>
     </React.StrictMode>
 );
 
