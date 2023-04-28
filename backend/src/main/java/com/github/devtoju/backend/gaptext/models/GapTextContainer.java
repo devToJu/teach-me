@@ -10,4 +10,7 @@ public record GapTextContainer(
         String description,
         List<GapText> gapTexts
 ) {
+    public GapTextContainer getCopy(String newId) {
+        return new GapTextContainer(newId, description, gapTexts);
+    }
 }

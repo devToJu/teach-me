@@ -1,5 +1,6 @@
 package com.github.devtoju.backend.gaptext;
 
+import com.github.devtoju.backend.common.services.IdService;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +12,11 @@ import static org.mockito.Mockito.*;
 
 class GapTextContainerServiceTest {
     private final GapTextContainerRepo gapTextContainerRepo = mock(GapTextContainerRepo.class);
+    private final IdService idService = mock(IdService.class);
 
     @Test
     void getAllTexts_shouldReturnEmptyList_whenRepoIsEmpty() {
-        GapTextContainerService gapTextContainerService = new GapTextContainerService(gapTextContainerRepo);
+        GapTextContainerService gapTextContainerService = new GapTextContainerService(gapTextContainerRepo, idService);
 
         when(gapTextContainerRepo.findAll())
                 .thenReturn(Collections.emptyList());

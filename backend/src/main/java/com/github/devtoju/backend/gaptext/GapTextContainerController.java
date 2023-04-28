@@ -2,6 +2,7 @@ package com.github.devtoju.backend.gaptext;
 
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,5 +16,11 @@ public class GapTextContainerController {
     @GetMapping
     public List<GapTextContainer> getAllContainers() {
         return gapTextContainerService.getAllContainers();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public GapTextContainer addContainer(@RequestBody GapTextContainer newContainer) {
+        return gapTextContainerService.addContainer(newContainer);
     }
 }
