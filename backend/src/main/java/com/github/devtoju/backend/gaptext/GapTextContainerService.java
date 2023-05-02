@@ -20,6 +20,6 @@ public class GapTextContainerService {
     public GapTextContainer addContainer(GapTextContainer newContainer) {
         String newId = idService.createUniqueId();
         return gapTextContainerRepo.save(
-                newContainer.getCopy(newId));
+                newContainer.copy(newId));
     }
 }
