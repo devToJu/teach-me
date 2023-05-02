@@ -4,8 +4,12 @@ import LogoWide from "./LogoWide";
 import React from "react";
 import NavigationNarrow from "./NavigationNarrow";
 import NavigationWide from "./NavigationWide";
+import {urlGapText, urlGapTextCreate} from "./PageModel";
 
-const pages = ['Gap Text Gallery'];
+const pages = [
+    {url: urlGapText, name:'Gap Text Gallery'},
+    {url: urlGapTextCreate, name: 'Create Gap Text'}
+];
 
 export default function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);

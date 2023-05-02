@@ -5,6 +5,7 @@ import ResponsiveAppBarBottom from "./components/navigation/ResponsiveAppBarBott
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UrlNotFound from "./components/UrlNotFound";
 import GapTextGallery from "./gaptext/components/GapTextGallery";
+import {urlGapText, urlGapTextCreate} from "./components/navigation/PageModel";
 
 function App() {
     return (
@@ -13,7 +14,8 @@ function App() {
                 <ResponsiveAppBar/>
                 <Routes>
                     <Route path="/" element={<Welcome/>}/>
-                    <Route path="/gaptext" element={<GapTextGallery/>}/>
+                    <Route path={urlGapText} element={<GapTextGallery/>}/>
+                    <Route path={urlGapTextCreate} element={<div>CREATE</div>}/>
                     <Route path="*" element={<UrlNotFound/>}/>
                 </Routes>
                 <ResponsiveAppBarBottom/>

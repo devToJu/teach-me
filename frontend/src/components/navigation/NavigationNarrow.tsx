@@ -3,18 +3,19 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 import {useNavigate} from "react-router-dom";
+import {PageModel} from "./PageModel";
 
 type Props = {
     anchorElNav: null | HTMLElement,
     handleCloseNavMenu: () => void,
     handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void,
-    pages: string[]
+    pages: PageModel[]
 }
 export default function NavigationNarrow(props: Props) {
     const navigation = useNavigate();
 
-    const handleCloseNavMenu = () => {
-        navigation("/gaptext")
+    const handleCloseNavMenu = (url: string) => {
+        navigation(url)
         props.handleCloseNavMenu()
     }
 
@@ -49,8 +50,8 @@ export default function NavigationNarrow(props: Props) {
                 }}
             >
                 {props.pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                        <Typography textAlign="center">{page}</Typography>
+                    <MenuItem key={page.name} onClick={() => handleCloseNavMenu(page.url)}>
+                        <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
                 ))}
             </Menu>

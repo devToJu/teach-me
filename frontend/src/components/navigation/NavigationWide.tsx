@@ -1,17 +1,18 @@
 import {Box, Button} from "@mui/material";
 import React from "react";
 import {useNavigate} from "react-router-dom";
+import {PageModel} from "./PageModel";
 
 type Props = {
     handleCloseNavMenu: () => void,
-    pages: string[]
+    pages: PageModel[]
 }
 
 export default function NavigationWide(props: Props) {
     const navigation = useNavigate();
 
-    const handleCloseNavMenu = () => {
-        navigation("/gaptext")
+    const handleCloseNavMenu = (url: string) => {
+        navigation(url)
         props.handleCloseNavMenu()
     }
 
@@ -19,11 +20,11 @@ export default function NavigationWide(props: Props) {
         <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
             {props.pages.map((page) => (
                 <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
+                    key={page.name}
+                    onClick={() => handleCloseNavMenu(page.url)}
                     sx={{my: 2, color: 'white', display: 'block'}}
                 >
-                    {page}
+                    {page.name}
                 </Button>
             ))}
         </Box>
