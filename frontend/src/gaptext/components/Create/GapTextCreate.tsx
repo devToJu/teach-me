@@ -1,4 +1,4 @@
-import {Container, Paper} from "@mui/material";
+import {Container, Paper, Typography} from "@mui/material";
 import React, {FormEvent, useContext} from "react";
 import {formStyle} from "./GapTextCreateStyles";
 import GapTextCreateContainer from "./GapTextCreateContainer";
@@ -17,6 +17,13 @@ export default function GapTextCreate() {
     return (
         <Container sx={{py: 8}} maxWidth="lg">
             <Paper elevation={12}>
+                <Typography
+                    align="center"
+                    pt={5}
+                    variant="h6"
+                >
+                    Create a Gap Text
+                </Typography>
                 <form onSubmit={save} style={formStyle}>
                     <Description/>
                     <GapTextCreateContainer/>
