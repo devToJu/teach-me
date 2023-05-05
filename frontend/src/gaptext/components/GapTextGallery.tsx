@@ -11,7 +11,13 @@ export default function GapTextGallery() {
             <Grid container spacing={4}>
                 {
                     gapTextContainers.map((gapText, index) =>
-                        <Grid item key={gapText.id} xs={12} sm={6} md={4}>
+                        <Grid
+                            item
+                            key={gapText.id}
+                            xs={12}
+                            sm={6}
+                            md={4}
+                        >
                             <GapTextCard gapText={gapText} number={index + 1}/>
                         </Grid>
                     )
