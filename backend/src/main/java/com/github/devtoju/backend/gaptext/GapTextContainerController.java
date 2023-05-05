@@ -21,6 +21,7 @@ public class GapTextContainerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @SuppressWarnings("java:S4684")
     public GapTextContainer addContainer(@RequestBody @Valid GapTextContainer newContainer) {
         return gapTextContainerService.addContainer(newContainer);
     }
