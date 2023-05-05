@@ -7,8 +7,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class GapTextFactory {
-     /**
+    /**
      * Creates a gap text container with four items
+     *
      * @return A new instance of a gap text container
      */
     public static GapTextContainer createContainer() {
@@ -26,6 +27,7 @@ public class GapTextFactory {
 
     /**
      * Creates a gap text container with an empty description
+     *
      * @return A new instance of a gap text container
      */
     public static GapTextContainer createContainerWithEmptyDescription() {
@@ -42,6 +44,7 @@ public class GapTextFactory {
     /**
      * Creates a gap text container with an empty description and
      * an empty list of gap texts
+     *
      * @return A new instance of a gap text container
      */
     public static GapTextContainer createContainerWhereDescriptionAndGapTextsAreEmpty() {
@@ -53,15 +56,14 @@ public class GapTextFactory {
     }
 
     public static String getErrorMessageEmptyGapTexts() {
-        return "Violate constraint 'Size' at 'gapTextContainer.gapTexts': size must be between 2 and 10";
+        return "Violate constraint 'Size' at 'gapTextContainer.gapTexts': size must be between 2 and 6";
     }
 
     private static GapText createText(String value, int pos) {
-        return new GapText(value, pos, false);
+        return new GapText("id-" + pos, value, pos, false);
     }
 
     private static GapText createGap(String value, int pos) {
-        return new GapText(value, pos, true);
+        return new GapText("id-" + pos, value, pos, true);
     }
-
 }
