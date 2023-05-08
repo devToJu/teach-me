@@ -8,16 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class GapTextContainerIntegrationTest {
 
     private final String apiUrl = "/api/gaptextcontainer";
@@ -58,9 +60,9 @@ class GapTextContainerIntegrationTest {
 
     @Test
     void addContainer_shouldReturnApiErrorAndStatusIsBadRequest_whenDescriptionIsEmpty() throws Exception {
-        GapTextContainer invalidContainer = GapTextFactory.createContainerWithEmptyDescription();
-        String invalidContainerAsJson = mapper.writeValueAsString(invalidContainer);
-        String expectedBody = GapTextFactory.getErrorMessageEmptyDescription();
+        var invalidContainerDTO = GapTextFactory.createContainerDtoWithEmptyDescription();
+        var invalidContainerAsJson = mapper.writeValueAsString(invalidContainerDTO);
+        var expectedBody = GapTextFactory.getErrorMessageEmptyDescription();
 
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,8 +74,8 @@ class GapTextContainerIntegrationTest {
 
     @Test
     void addContainer_shouldReturnApiErrorAndStatusIsBadRequest_whenDescriptionAndGapTextsAreEmpty() throws Exception {
-        GapTextContainer invalidContainer = GapTextFactory.createContainerWhereDescriptionAndGapTextsAreEmpty();
-        String invalidContainerAsJson = mapper.writeValueAsString(invalidContainer);
+        var invalidContainerDTO = GapTextFactory.createContainerDtoWhereDescriptionAndGapTextsAreEmpty();
+        var invalidContainerAsJson = mapper.writeValueAsString(invalidContainerDTO);
 
         String[] expectedBody = {
                 GapTextFactory.getErrorMessageEmptyGapTexts(),
@@ -86,5 +88,33 @@ class GapTextContainerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(expectedBody)));
+    }
+
+    @Test
+    void addContainer_shouldContainsDifferentIds_whenCalledTwice() throws Exception {
+        var newContainerDTO = GapTextFactory.createContainerDTO();
+        var newContainerAsJson = mapper.writeValueAsString(newContainerDTO);
+
+        var responseBodyOneAsJson = mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newContainerAsJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        var responseBodyTwoAsJson = mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newContainerAsJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        var actualOne = mapper.readValue(responseBodyOneAsJson, GapTextContainer.class);
+        var actualTwo = mapper.readValue(responseBodyTwoAsJson, GapTextContainer.class);
+        assertNotEquals(actualOne.id(), actualTwo.id());
     }
 }
