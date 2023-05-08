@@ -1,8 +1,7 @@
 package com.github.devtoju.backend.gaptext;
 
 import com.github.devtoju.backend.gaptext.models.GapText;
-import com.github.devtoju.backend.gaptext.models.GapTextContainer;
-import com.github.devtoju.backend.gaptext.models.GapTextContainerDTO;
+import com.github.devtoju.backend.gaptext.models.*;
 
 import java.util.Arrays;
 import java.util.Collections;

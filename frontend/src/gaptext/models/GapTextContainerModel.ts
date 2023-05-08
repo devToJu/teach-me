@@ -1,5 +1,5 @@
-import { GapTextContainerWithoutIdModel } from "./GapTextContainerWithoutIdModel";
+import { GapTextContainerDtoModel } from "./GapTextContainerDtoModel";
 
 export type GapTextContainerModel = {
     id: string,
-} & GapTextContainerWithoutIdModel
+} & GapTextContainerDtoModel

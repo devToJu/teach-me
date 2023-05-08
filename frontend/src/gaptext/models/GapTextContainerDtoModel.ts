@@ -1,6 +1,6 @@
 import {GapTextModel} from "./GapTextModel";
 
-export type GapTextContainerWithoutIdModel = {
+export type GapTextContainerDtoModel = {
     description: string,
     gapTexts: GapTextModel[]
 }
