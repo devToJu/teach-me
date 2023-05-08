@@ -3,7 +3,7 @@ import {ReactElement, useContext, useState} from "react";
 import {GapTextModel} from "../models/GapTextModel";
 import {GapTextContext} from "./GapTextContext";
 import {v4 as uuidv4} from "uuid";
-import {GapTextContainerWithoutIdModel} from "../models/GapTextContainerWithoutIdModel";
+import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
 
 type Props = {
     children: ReactElement
@@ -46,12 +46,12 @@ export default function GapTextCreateContextProvider(props: Props) {
     }
 
     const saveContainer = () => {
-        const newGapTextContainer: GapTextContainerWithoutIdModel = {
+        const newGapTextContainerDTO: GapTextContainerDtoModel = {
             gapTexts: gapTexts,
             description: description
         }
 
-        saveGapTextContainer(newGapTextContainer, clearContainer)
+        saveGapTextContainer(newGapTextContainerDTO, clearContainer)
     }
 
     const providerValue: GapTextCreateContextProviderValue = {

@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        List<String> messages = createValidationErrorMessages(e.getFieldErrors());
+        var messages = createValidationErrorMessages(e);
         return createResponseEntity(messages);
     }
 
@@ -22,21 +22,23 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    private List<String> createValidationErrorMessages(List<FieldError> fieldErrors) {
-        List<String> messages = new ArrayList<>();
+    private List<String> createValidationErrorMessages(MethodArgumentNotValidException e) {
+        var target = e.getTarget();
+        var className = target == null ? "" : target.getClass().getSimpleName();
+        var messages = new ArrayList<String>();
 
-        for (FieldError error : fieldErrors) {
-            messages.add(buildArgumentNotValidMessage(error));
+        for (FieldError error : e.getFieldErrors()) {
+            messages.add(createValidationErrorMessage(error, className));
         }
 
         return messages;
     }
 
-    private String buildArgumentNotValidMessage(FieldError error) {
+    private String createValidationErrorMessage(FieldError error, String className) {
         return  "Violate constraint '" +
                 error.getCode() +
                 "' at '" +
-                error.getObjectName() +
+                className +
                 "." +
                 error.getField() +
                 "': " +

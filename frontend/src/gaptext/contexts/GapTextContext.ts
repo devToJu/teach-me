@@ -1,10 +1,10 @@
 import {createContext} from "react";
-import {GapTextContainerWithoutIdModel} from "../models/GapTextContainerWithoutIdModel";
+import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
 
 export type GapTextContextProviderValue = {
     gapTextContainers: GapTextContainerModel[],
-    saveGapTextContainer: (newContainer: GapTextContainerWithoutIdModel, successCallback: () => void) => void
+    saveGapTextContainer: (newContainerDTO: GapTextContainerDtoModel, successCallback: () => void) => void
 }
 
 export const GapTextContext = createContext<GapTextContextProviderValue>(
