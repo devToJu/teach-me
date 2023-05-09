@@ -2,6 +2,7 @@ import {ReactElement, useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
 import {toast, ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {GapTextContext, GapTextContextProviderValue} from "./GapTextContext"
 import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
 
@@ -35,6 +36,7 @@ export default function GapTextContextProvider(props: Props) {
     const saveGapTextContainer = ((newContainerDTO: GapTextContainerDtoModel, successCallback: () => void) => {
             axios.post(apiUrl, newContainerDTO)
                 .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
+                .then(() => toast.success("Container saved successfully!"))
                 .then(() => successCallback())
                 .catch(reason => showError(reason))
         }
