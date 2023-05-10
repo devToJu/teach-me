@@ -1,6 +1,7 @@
 package com.github.devtoju.backend.gaptext;
 
 import com.github.devtoju.backend.gaptext.components.CreateDtoToGapTextContainerMapper;
+import com.github.devtoju.backend.gaptext.components.UpdateDtoToGapTextContainerMapper;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +17,15 @@ class GapTextContainerServiceTest {
     private final GapTextContainerRepo gapTextContainerRepo = mock(GapTextContainerRepo.class);
     private final CreateDtoToGapTextContainerMapper createDtoToGapTextContainerMapper =
             mock(CreateDtoToGapTextContainerMapper.class);
+    private final UpdateDtoToGapTextContainerMapper updateDtoToGapTextContainerMapper =
+            mock(UpdateDtoToGapTextContainerMapper.class);
 
     @BeforeEach
     void init() {
         gapTextContainerService = new GapTextContainerService(
                 gapTextContainerRepo,
-                createDtoToGapTextContainerMapper
+                createDtoToGapTextContainerMapper,
+                updateDtoToGapTextContainerMapper
         );
     }
 

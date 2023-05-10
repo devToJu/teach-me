@@ -1,5 +1,6 @@
 package com.github.devtoju.backend.gaptext;
 
+import com.github.devtoju.backend.gaptext.exceptions.GapTextContainerIdIsNotValidException;
 import com.github.devtoju.backend.gaptext.models.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,18 @@ public class GapTextContainerController {
     @ResponseStatus(HttpStatus.CREATED)
     public GapTextContainer addContainer(@RequestBody @Valid GapTextContainerCreateDTO newCreateDTO) {
         return gapTextContainerService.addContainer(newCreateDTO);
+    }
+
+    @PutMapping("/{id}")
+    public GapTextContainer updateContainer(
+            @PathVariable String id,
+            @RequestBody @Valid GapTextContainerUpdateDTO updateDTO
+    ) {
+        var idIsInvalid = id.isBlank() || !id.equals(updateDTO.id());
+        if (idIsInvalid) {
+            throw new GapTextContainerIdIsNotValidException(id, updateDTO.id());
+        }
+
+        return gapTextContainerService.updateContainer(updateDTO);
     }
 }
