@@ -9,14 +9,14 @@ import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
-public class GapTextContainerMapper implements Function<GapTextContainerDTO, GapTextContainer> {
+public class CreateDtoToGapTextContainerMapper implements Function<GapTextContainerCreateDTO, GapTextContainer> {
     private final IdService idService;
 
     @Override
-    public GapTextContainer apply(GapTextContainerDTO gapTextContainerDTO) {
+    public GapTextContainer apply(GapTextContainerCreateDTO createDTO) {
         return new GapTextContainer(
                 idService.createUniqueId(),
-                gapTextContainerDTO.description(),
-                gapTextContainerDTO.gapTexts());
+                createDTO.description(),
+                createDTO.gapTexts());
     }
 }

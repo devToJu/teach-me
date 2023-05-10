@@ -1,7 +1,6 @@
 package com.github.devtoju.backend.gaptext;
 
-import com.github.devtoju.backend.gaptext.models.GapTextContainer;
-import com.github.devtoju.backend.gaptext.models.GapTextContainerDTO;
+import com.github.devtoju.backend.gaptext.models.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class GapTextContainerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GapTextContainer addContainer(@RequestBody @Valid GapTextContainerDTO newContainerDTO) {
-        return gapTextContainerService.addContainer(newContainerDTO);
+    public GapTextContainer addContainer(@RequestBody @Valid GapTextContainerCreateDTO newCreateDTO) {
+        return gapTextContainerService.addContainer(newCreateDTO);
     }
 }

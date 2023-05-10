@@ -41,63 +41,66 @@ class GapTextContainerIntegrationTest {
 
     @Test
     void addContainer_shouldReturnAddedContainer() throws Exception {
-        GapTextContainer newContainer = GapTextFactory.createContainer();
-        String newContainerAsJson = mapper.writeValueAsString(newContainer);
+        var newCreateDTO = GapTextFactory.ofCreateDTO();
+        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
 
         String responseString = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newContainerAsJson))
+                        .content(newCreateDtoAsJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
-        GapTextContainer actual = mapper.readValue(responseString, GapTextContainer.class);
-        GapTextContainer expected = newContainer.copy(actual.id());
+        var actual = mapper.readValue(responseString, GapTextContainer.class);
+        var expected = GapTextFactory
+                .ofGapTextContainer()
+                .copy(actual.id());
+
         assertEquals(expected, actual);
     }
 
     @Test
     void addContainer_shouldReturnApiErrorAndStatusIsBadRequest_whenDescriptionIsEmpty() throws Exception {
-        var invalidContainerDTO = GapTextFactory.createContainerDtoWithEmptyDescription();
-        var invalidContainerAsJson = mapper.writeValueAsString(invalidContainerDTO);
-        var expectedBody = GapTextFactory.getErrorMessageEmptyDescription();
+        var invalidCreateDTO = GapTextFactory.ofCreateDtoWithEmptyDescription();
+        var invalidCreateDtoAsJson = mapper.writeValueAsString(invalidCreateDTO);
+        var errorMessage = GapTextFactory.getErrorMessageEmptyDescription();
 
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidContainerAsJson))
+                        .content(invalidCreateDtoAsJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
-                .andExpect(jsonPath("$.messages").value(expectedBody));
+                .andExpect(jsonPath("$.messages").value(errorMessage));
     }
 
     @Test
     void addContainer_shouldReturnApiErrorAndStatusIsBadRequest_whenDescriptionAndGapTextsAreEmpty() throws Exception {
-        var invalidContainerDTO = GapTextFactory.createContainerDtoWhereDescriptionAndGapTextsAreEmpty();
-        var invalidContainerAsJson = mapper.writeValueAsString(invalidContainerDTO);
+        var invalidCreateDTO = GapTextFactory.ofCreateDtoWhereDescriptionAndGapTextsAreEmpty();
+        var invalidCreateDtoAsJson = mapper.writeValueAsString(invalidCreateDTO);
 
-        String[] expectedBody = {
+        String[] errorMessages = {
                 GapTextFactory.getErrorMessageEmptyGapTexts(),
                 GapTextFactory.getErrorMessageEmptyDescription()
         };
 
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidContainerAsJson))
+                        .content(invalidCreateDtoAsJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
-                .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(expectedBody)));
+                .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(errorMessages)));
     }
 
     @Test
     void addContainer_shouldContainsDifferentIds_whenCalledTwice() throws Exception {
-        var newContainerDTO = GapTextFactory.createContainerDTO();
-        var newContainerAsJson = mapper.writeValueAsString(newContainerDTO);
+        var newCreateDTO = GapTextFactory.ofCreateDTO();
+        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
 
         var responseBodyOneAsJson = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newContainerAsJson))
+                        .content(newCreateDtoAsJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andReturn()
@@ -106,7 +109,7 @@ class GapTextContainerIntegrationTest {
 
         var responseBodyTwoAsJson = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newContainerAsJson))
+                        .content(newCreateDtoAsJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
                 .andReturn()

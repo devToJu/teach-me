@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public record GapTextContainerDTO(
+public record GapTextContainerCreateDTO(
         @NotBlank
         @Size(max = 255)
         String description,

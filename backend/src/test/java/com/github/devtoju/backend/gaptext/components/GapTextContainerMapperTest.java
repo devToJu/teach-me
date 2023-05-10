@@ -9,20 +9,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GapTextContainerMapperTest {
 
-    GapTextContainerMapper gapTextContainerMapper =
-            new GapTextContainerMapper(
+    CreateDtoToGapTextContainerMapper createDtoToGapTextContainerMapper =
+            new CreateDtoToGapTextContainerMapper(
                     new IdService()
             );
 
     @Test
     void apply_shouldReturnDifferentIds_whenCalledTwice() {
-        var containerWithoutIdDTO = GapTextFactory.createContainerDTO();
+        var createDTO = GapTextFactory.ofCreateDTO();
 
-        var actualOne = gapTextContainerMapper.apply(containerWithoutIdDTO);
-        var actualTwo = gapTextContainerMapper.apply(containerWithoutIdDTO);
+        var actualOne = createDtoToGapTextContainerMapper.apply(createDTO);
+        var actualTwo = createDtoToGapTextContainerMapper.apply(createDTO);
 
         assertInstanceOf(GapTextContainer.class, actualOne);
         assertInstanceOf(GapTextContainer.class, actualTwo);
+        assertFalse(actualOne.id().isEmpty());
+        assertFalse(actualTwo.id().isEmpty());
         assertNotEquals(actualOne.id(), actualTwo.id());
     }
 }
