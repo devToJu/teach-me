@@ -25,7 +25,8 @@ public class GapTextContainerService {
     }
 
     public GapTextContainer updateContainer(GapTextContainerUpdateDTO updateDTO) {
-        if (!gapTextContainerRepo.existsById(updateDTO.id())) {
+        var containerNotExist = !gapTextContainerRepo.existsById(updateDTO.id());
+        if (containerNotExist) {
             throw new GapTextContainerNotExistException(updateDTO.id());
         }
 

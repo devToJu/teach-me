@@ -25,8 +25,8 @@ public class GlobalExceptionHandler {
     ) {
         var messages = List.of(
                 e.getMessage(),
-                "URL Id: " + e.getUrlId(),
-                "Container Id: " + e.getContainerId()
+                "URL ID: '" + e.getUrlId() + "'",
+                "Container ID: '" + e.getContainerId() + "'"
         );
 
         return createResponseEntity(messages, HttpStatus.UNPROCESSABLE_ENTITY);

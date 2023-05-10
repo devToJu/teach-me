@@ -11,6 +11,7 @@ public class GapTextFactory {
 
     static String description = "to clean, to ring";
     static String emptyDescription = "";
+    static String updatedDescription = "updated description";
     static String id = "testId";
 
     /**
@@ -20,6 +21,15 @@ public class GapTextFactory {
      */
     public static GapTextContainer ofGapTextContainer() {
         return new GapTextContainer(id, description, createTexts());
+    }
+
+    /**
+     * Instantiate container with four text items, a given id and an updated description
+     *
+     * @return A new gap text container
+     */
+    public static GapTextContainer ofGapTextContainerUpdated(String id) {
+        return new GapTextContainer(id, updatedDescription, createTexts());
     }
 
     /**
@@ -51,7 +61,25 @@ public class GapTextFactory {
     }
 
     /**
-     * Creates a error message when the description attribute is not valid
+     * Instantiate a container with an updated description
+     *
+     * @return A new gap text container update DTO
+     */
+    public static GapTextContainerUpdateDTO ofUpdateDTO() {
+        return new GapTextContainerUpdateDTO(id, updatedDescription, createTexts());
+    }
+
+    /**
+     * Instantiate a container with a given id and an updated description
+     *
+     * @return A new gap text container update DTO
+     */
+    public static GapTextContainerUpdateDTO ofUpdateDTO(String id) {
+        return new GapTextContainerUpdateDTO(id, updatedDescription, createTexts());
+    }
+
+    /**
+     * Creates an error message when the description attribute is not valid
      *
      * @return error message
      */
@@ -62,7 +90,7 @@ public class GapTextFactory {
     }
 
     /**
-     * Creates a error message when the gapTexts attribute is not valid
+     * Creates an error message when the gapTexts attribute is not valid
      *
      * @return error message
      */
@@ -70,6 +98,38 @@ public class GapTextFactory {
         return "Violate constraint 'Size' at '" +
                 GapTextContainerCreateDTO.class.getSimpleName() +
                 ".gapTexts': size must be between 2 and 6";
+    }
+
+    /**
+     * Creates an error message when the gap text id does not exist
+     *
+     * @return error message
+     */
+    public static String getErrorMessageIdNotExist() {
+        return "Updating of Gap text container denied: Container with ID '" +
+                id + "' does not exist!";
+    }
+
+    public static String[] getErrorMessagesIdIsBlank() {
+        return new String[]{
+                "Gap text container ID ' ' is invalid!",
+                "URL ID: ' '",
+                "Container ID: 'testId'"
+        };
+    }
+
+    public static String[] getErrorMessagesIdsAreNotEquals() {
+        /*return List.of(
+                "Gap text container ID 'otherId' is invalid!",
+                "URL ID: 'otherId'",
+                "Container ID: 'testId'"
+        );*/
+
+        return new String[]{
+                "Gap text container ID 'otherId' is invalid!",
+                "URL ID: 'otherId'",
+                "Container ID: 'testId'"
+        };
     }
 
     private static List<GapText> createTexts() {
