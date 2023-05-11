@@ -1,9 +1,10 @@
 import {GapTextCreateContext, GapTextCreateContextProviderValue} from "./GapTextCreateContext";
-import {ReactElement, useContext, useState} from "react";
+import {ReactElement, useContext, useMemo, useState} from "react";
 import {GapTextModel} from "../models/GapTextModel";
 import {GapTextContext} from "./GapTextContext";
 import {v4 as uuidv4} from "uuid";
 import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
+import {GapTextContainerModel} from "../models/GapTextContainerModel";
 
 type Props = {
     children: ReactElement
@@ -12,7 +13,7 @@ type Props = {
 export default function GapTextCreateContextProvider(props: Props) {
     const [description, setDescription] = useState<string>("")
     const [gapTexts, setGapTexts] = useState<GapTextModel[]>([])
-    const {saveGapTextContainer} = useContext(GapTextContext)
+    const {saveGapTextContainer, updateGapTextContainer} = useContext(GapTextContext)
 
     const addNewRow = () => {
         const newGapText: GapTextModel = {
@@ -54,16 +55,42 @@ export default function GapTextCreateContextProvider(props: Props) {
         saveGapTextContainer(newGapTextContainerDTO, clearContainer)
     }
 
-    const providerValue: GapTextCreateContextProviderValue = {
-        description: description,
-        gapTexts: gapTexts,
-        setDescription: setDescription,
-        addNewRow: addNewRow,
-        removeRow: removeRow,
-        updateRow: updateRow,
-        clearContainer: clearContainer,
-        saveContainer: saveContainer
+    const updateContainer = (id: string) => {
+        const updateContainer: GapTextContainerModel = {
+            id: id,
+            description: description,
+            gapTexts: gapTexts
+        }
+
+        updateGapTextContainer(updateContainer)
     }
+
+    const providerValue: GapTextCreateContextProviderValue = useMemo(() => {
+            return {
+                description: description,
+                gapTexts: gapTexts,
+                setDescription: setDescription,
+                setGapTexts: setGapTexts,
+                addNewRow: addNewRow,
+                removeRow: removeRow,
+                updateRow: updateRow,
+                clearContainer: clearContainer,
+                saveContainer: saveContainer,
+                updateContainer: updateContainer
+            }
+        },
+        [
+            description,
+            gapTexts,
+            setDescription,
+            addNewRow,
+            removeRow,
+            updateRow,
+            clearContainer,
+            saveContainer,
+            updateContainer
+        ]
+    )
 
     return (
         <GapTextCreateContext.Provider value={providerValue}>

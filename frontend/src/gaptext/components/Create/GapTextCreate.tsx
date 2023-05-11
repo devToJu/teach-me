@@ -5,13 +5,15 @@ import GapTextCreateContainer from "./GapTextCreateContainer";
 import {GapTextCreateContext} from "../../contexts/GapTextCreateContext";
 import Description from "./Description";
 import ButtonMenu from "./ButtonMenu";
+import {useParams} from "react-router-dom";
 
 export default function GapTextCreate() {
-    const {saveContainer} = useContext(GapTextCreateContext)
+    const {id} = useParams()
+    const {saveContainer, updateContainer} = useContext(GapTextCreateContext)
 
-    const save = (event: FormEvent<HTMLFormElement>) => {
+    const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        saveContainer();
+        id ? updateContainer(id) : saveContainer()
     }
 
     return (
@@ -22,9 +24,9 @@ export default function GapTextCreate() {
                     pt={5}
                     variant="h6"
                 >
-                    Create a Gap Text
+                    {id ? "Update a Gap Text" : "Create a Gap Text"}
                 </Typography>
-                <form onSubmit={save} style={formStyle}>
+                <form onSubmit={handleOnSubmit} style={formStyle}>
                     <Description/>
                     <GapTextCreateContainer/>
                     <ButtonMenu/>
