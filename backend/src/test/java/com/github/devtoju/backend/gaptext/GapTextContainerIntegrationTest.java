@@ -176,4 +176,18 @@ class GapTextContainerIntegrationTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(errorMessages)));
     }
+
+    @Test
+    void updateContainer_shouldReturnApiErrorAndStatus422_whenIdNotExist() throws Exception {
+        var updateDTO = GapTextFactory.ofUpdateDTO();
+        var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
+        var errorMessage = GapTextFactory.getErrorMessageIdNotExist();
+        var url = apiUrl + "/" + updateDTO.id();
+
+        mockMvc.perform(put(url, updateDTO)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateDtoAsJson))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.messages").value(errorMessage));
+    }
 }

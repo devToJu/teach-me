@@ -110,6 +110,11 @@ public class GapTextFactory {
                 id + "' does not exist!";
     }
 
+    /**
+     * Creates an error message when the url id is blank
+     *
+     * @return error message
+     */
     public static String[] getErrorMessagesIdIsBlank() {
         return new String[]{
                 "Gap text container ID ' ' is invalid!",
@@ -118,13 +123,12 @@ public class GapTextFactory {
         };
     }
 
+    /**
+     * Creates an error message when the url id and the gap text id are not equals
+     *
+     * @return error message
+     */
     public static String[] getErrorMessagesIdsAreNotEquals() {
-        /*return List.of(
-                "Gap text container ID 'otherId' is invalid!",
-                "URL ID: 'otherId'",
-                "Container ID: 'testId'"
-        );*/
-
         return new String[]{
                 "Gap text container ID 'otherId' is invalid!",
                 "URL ID: 'otherId'",
