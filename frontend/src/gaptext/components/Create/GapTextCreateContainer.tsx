@@ -14,25 +14,18 @@ export default function GapTextCreateContainer() {
     const {gapTexts, setGapTexts} = useContext(GapTextCreateContext)
 
     useEffect(() => {
-        if (id) {
+        if (id  !== undefined) {
             const container = gapTextContainers.find(item => item.id === id)
             setGapTexts(container?.gapTexts || [])
         }
     }, [])
-
-    const getGapTexts = () => {
-        const container = gapTextContainers.find(item => item.id === id)
-        return container?.gapTexts || []
-    }
-
-    const currentGapTexts = id ? getGapTexts() : gapTexts
 
     return (
         <Box sx={boxStyleBorder}>
             <Grid container m={2} spacing={2}>
                 <RowHeadline/>
                 {
-                    currentGapTexts.map(gapText => <GapTextCreateRow key={gapText.id} gapText={gapText}/>)
+                    gapTexts.map(gapText => <GapTextCreateRow key={gapText.id} gapText={gapText}/>)
                 }
                 <AddRow/>
             </Grid>

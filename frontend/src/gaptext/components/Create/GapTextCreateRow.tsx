@@ -29,6 +29,7 @@ export default function GapTextCreateRow(props: Props) {
                 <Checkbox
                     name={nameGapTextIsGap}
                     value={gapText.isGap}
+                    checked={gapText.isGap}
                     onChange={update}
                 />
             </Grid>

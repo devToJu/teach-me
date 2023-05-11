@@ -10,7 +10,7 @@ export default function Description() {
     const {gapTextContainers} = useContext(GapTextContext)
 
     useEffect(() => {
-        if(id !== "") {
+        if (id !== undefined) {
             const currentGapText = gapTextContainers.find(value => value.id === id)
             setDescription(currentGapText?.description || "")
         }
