@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {GapTextContext} from "../contexts/GapTextContext";
+import {GapTextContext} from "../common/GapTextContext";
 import {Container, Grid} from "@mui/material";
 import GapTextCard from "./GapTextCard";
 

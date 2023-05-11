@@ -1,25 +1,24 @@
 import {Checkbox, Grid, IconButton, TextField} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React, {ChangeEvent, useContext, useState} from "react";
+import React, {ChangeEvent} from "react";
 import {GapTextModel} from "../../models/GapTextModel";
-import {GapTextCreateContext} from "../../contexts/GapTextCreateContext";
 
 type Props = {
-    gapText: GapTextModel
+    gapText: GapTextModel,
+    updateRow: (value: GapTextModel) => void,
+    removeRow: (value: GapTextModel) => void
 }
 
-export default function GapTextCreateRow(props: Props) {
-    const {removeRow, updateRow} = useContext(GapTextCreateContext)
-    const [gapText, setGapText] = useState<GapTextModel>(props.gapText)
+export default function GapTextCreateOrUpdateRow(props: Props) {
     const nameGapTextIsGap = "isGap"
     const nameGapTextValue = "value"
+    const {gapText, updateRow, removeRow} = props
 
     const update = (event: ChangeEvent<HTMLInputElement>) => {
         const attributeName = event.target.name
         const value = attributeName === nameGapTextIsGap ? event.target.checked : event.target.value
         const newGapText = {...gapText, [attributeName]: value}
 
-        setGapText(newGapText)
         updateRow(newGapText)
     }
 

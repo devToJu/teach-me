@@ -6,7 +6,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UrlNotFound from "./components/UrlNotFound";
 import GapTextGallery from "./gaptext/components/GapTextGallery";
 import {urlGapText, urlGapTextCreate} from "./components/navigation/PageModel";
-import GapTextCreateOrUpdate from "./gaptext/components/Create/GapTextCreateOrUpdate";
+import GapTextCreateOrUpdate from "./gaptext/components/createOrUpdate/GapTextCreateOrUpdate";
 
 function App() {
     return (
