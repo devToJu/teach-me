@@ -14,41 +14,40 @@ public class GapTextFactory {
     static String id = "testId";
 
     /**
-     * Creates a gap text container with four text items
+     * Instantiate container with four text items
      *
-     * @return A new instance of a gap text container
+     * @return A new gap text container
      */
-    public static GapTextContainer createContainer() {
+    public static GapTextContainer ofGapTextContainer() {
         return new GapTextContainer(id, description, createTexts());
     }
 
     /**
-     * Creates a gap text container DTO with four text items
+     * Instantiate a container with four text items
      *
-     * @return A new instance of a gap text container DTO
+     * @return A new gap text container create DTO
      */
-    public static GapTextContainerDTO createContainerDTO() {
-        return new GapTextContainerDTO(description, createTexts());
+    public static GapTextContainerCreateDTO ofCreateDTO() {
+        return new GapTextContainerCreateDTO(description, createTexts());
     }
 
     /**
-     * Creates a gap text container DTO with four text items and
-     * an empty description
+     * Instantiate a container with four text items and an empty description
      *
-     * @return A new instance of a gap text container DTO
+     * @return A new gap text container create DTO
      */
-    public static GapTextContainerDTO createContainerDtoWithEmptyDescription() {
-        return new GapTextContainerDTO(emptyDescription, createTexts());
+    public static GapTextContainerCreateDTO ofCreateDtoWithEmptyDescription() {
+        return new GapTextContainerCreateDTO(emptyDescription, createTexts());
     }
 
     /**
-     * Creates a gap text container DTO with an empty description and
+     * Instantiate a container with an empty description and
      * an empty list of gap texts
      *
-     * @return A new instance of a gap text container DTO
+     * @return A new gap text container create DTO
      */
-    public static GapTextContainerDTO createContainerDtoWhereDescriptionAndGapTextsAreEmpty() {
-        return new GapTextContainerDTO(emptyDescription, Collections.emptyList());
+    public static GapTextContainerCreateDTO ofCreateDtoWhereDescriptionAndGapTextsAreEmpty() {
+        return new GapTextContainerCreateDTO(emptyDescription, Collections.emptyList());
     }
 
     /**
@@ -58,7 +57,7 @@ public class GapTextFactory {
      */
     public static String getErrorMessageEmptyDescription() {
         return "Violate constraint 'NotBlank' at '" +
-                GapTextContainerDTO.class.getSimpleName() +
+                GapTextContainerCreateDTO.class.getSimpleName() +
                 ".description': must not be blank";
     }
 
@@ -69,7 +68,7 @@ public class GapTextFactory {
      */
     public static String getErrorMessageEmptyGapTexts() {
         return "Violate constraint 'Size' at '" +
-                GapTextContainerDTO.class.getSimpleName() +
+                GapTextContainerCreateDTO.class.getSimpleName() +
                 ".gapTexts': size must be between 2 and 6";
     }
 

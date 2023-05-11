@@ -1,6 +1,6 @@
 package com.github.devtoju.backend.gaptext;
 
-import com.github.devtoju.backend.gaptext.components.GapTextContainerMapper;
+import com.github.devtoju.backend.gaptext.components.CreateDtoToGapTextContainerMapper;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,13 +14,14 @@ import static org.mockito.Mockito.*;
 class GapTextContainerServiceTest {
     GapTextContainerService gapTextContainerService;
     private final GapTextContainerRepo gapTextContainerRepo = mock(GapTextContainerRepo.class);
-    private final GapTextContainerMapper gapTextContainerMapper = mock(GapTextContainerMapper.class);
+    private final CreateDtoToGapTextContainerMapper createDtoToGapTextContainerMapper =
+            mock(CreateDtoToGapTextContainerMapper.class);
 
     @BeforeEach
     void init() {
         gapTextContainerService = new GapTextContainerService(
                 gapTextContainerRepo,
-                gapTextContainerMapper
+                createDtoToGapTextContainerMapper
         );
     }
 
@@ -38,18 +39,18 @@ class GapTextContainerServiceTest {
 
     @Test
     void addContainer_shouldReturnAddedContainer() {
-        var newContainer = GapTextFactory.createContainer();
-        var newContainerDTO = GapTextFactory.createContainerDTO();
-        var expected = GapTextFactory.createContainer();
+        var newContainer = GapTextFactory.ofGapTextContainer();
+        var newCreateDTO = GapTextFactory.ofCreateDTO();
+        var expected = GapTextFactory.ofGapTextContainer();
 
-        when(gapTextContainerMapper.apply(newContainerDTO))
+        when(createDtoToGapTextContainerMapper.apply(newCreateDTO))
                 .thenReturn(newContainer);
         when(gapTextContainerRepo.save(newContainer))
                 .thenReturn(newContainer);
 
-        var actual = gapTextContainerService.addContainer(newContainerDTO);
+        var actual = gapTextContainerService.addContainer(newCreateDTO);
 
-        verify(gapTextContainerMapper).apply(newContainerDTO);
+        verify(createDtoToGapTextContainerMapper).apply(newCreateDTO);
         verify(gapTextContainerRepo).save(newContainer);
         assertEquals(expected, actual);
     }
