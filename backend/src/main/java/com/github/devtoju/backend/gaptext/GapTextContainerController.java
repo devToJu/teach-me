@@ -20,6 +20,15 @@ public class GapTextContainerController {
         return gapTextContainerService.getAllContainers();
     }
 
+    @GetMapping("/{id}")
+    public GapTextContainer getContainerById(@PathVariable String id) {
+        if (id.isBlank()) {
+            throw new GapTextContainerIdIsNotValidException(id);
+        }
+
+        return gapTextContainerService.getContainerById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GapTextContainer addContainer(@RequestBody @Valid GapTextContainerCreateDTO newCreateDTO) {

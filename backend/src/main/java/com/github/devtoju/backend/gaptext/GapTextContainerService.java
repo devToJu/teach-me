@@ -1,7 +1,7 @@
 package com.github.devtoju.backend.gaptext;
 
 import com.github.devtoju.backend.gaptext.components.*;
-import com.github.devtoju.backend.gaptext.exceptions.GapTextContainerNotExistException;
+import com.github.devtoju.backend.gaptext.exceptions.*;
 import com.github.devtoju.backend.gaptext.models.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,12 @@ public class GapTextContainerService {
 
     public List<GapTextContainer> getAllContainers() {
         return gapTextContainerRepo.findAll();
+    }
+
+    public GapTextContainer getContainerById(String id) {
+        return gapTextContainerRepo
+                .getById(id)
+                .orElseThrow(() -> new GapTextContainerIdIsNotValidException(id));
     }
 
     public GapTextContainer addContainer(GapTextContainerCreateDTO newCreateDTO) {
