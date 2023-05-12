@@ -29,7 +29,7 @@ export function useGapTextContainer() {
         isCreateContainer ?
             updateContainerAttributes.current("", []) :
             loadContainerById.current(id, updateContainerAttributes.current)
-    }, [id])
+    }, [id, isCreateContainer])
 
     const clearContainer = () => {
         setGapTexts([])
