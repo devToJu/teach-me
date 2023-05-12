@@ -4,17 +4,17 @@ import {formStyle} from "./GapTextCreateOrUpdateStyles";
 import GapTextCreateOrUpdateContainer from "./GapTextCreateOrUpdateContainer";
 import Description from "./Description";
 import ButtonMenu from "./ButtonMenu";
-import useGapTextContainer from "../../common/useGapTextContainer";
+import {useGapTextContainer} from "../../common/useGapTextContainer";
 
 export default function GapTextCreateOrUpdate() {
     const {
         description,
         gapTexts,
+        isCreateContainer,
         setDescription,
         addEmptyRow,
         removeRow,
         updateRow,
-        isCreateContainer,
         clearContainer,
         saveContainer,
         updateContainer

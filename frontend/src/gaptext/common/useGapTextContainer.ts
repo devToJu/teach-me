@@ -1,31 +1,32 @@
 import {useContext, useEffect, useRef, useState} from "react";
 import {GapTextContext} from "./GapTextContext";
 import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
-import useGapTexts from "./useGapTexts";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
+import {GapTextModel} from "../models/GapTextModel";
+import {useGapTexts} from "./useGapTexts";
 import {useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function useGapTextContainer() {
-    const {gapTextContainers, saveGapTextContainer, updateGapTextContainer} = useContext(GapTextContext)
+export function useGapTextContainer() {
+    const {loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer} = useContext(GapTextContext)
     const {gapTexts, setGapTexts, addEmptyRow, removeRow, updateRow} = useGapTexts()
     const [description, setDescription] = useState<string>("")
     const {id} = useParams()
 
-    const setGapTextsRef = useRef(setGapTexts)
-    const gapTextContainersRef = useRef(gapTextContainers)
+    const updateContainerAttributes = useRef(
+        (description: string, gapTexts: GapTextModel[]) => {
+            setDescription(description)
+            setGapTexts(gapTexts)
+        }
+    )
 
     useEffect(() => {
+        console.log("useGapTextContainer => useEffect called twice? id: ", id, " REMOVE FROM DEPLOY WITH NEXT FEATURE!")
         if (id !== undefined) {
-            const currentContainer = gapTextContainersRef.current
-                .find(container => container.id === id);
-
-            setDescription(currentContainer?.description || "")
-            setGapTextsRef.current(currentContainer?.gapTexts || [])
+            loadGapTextContainerById(id, updateContainerAttributes.current)
         } else {
-            setDescription("")
-            setGapTextsRef.current([])
+            updateContainerAttributes.current("", [])
         }
     }, [id])
 
