@@ -120,4 +120,74 @@ class GapTextContainerIntegrationTest {
         var actualTwo = mapper.readValue(responseBodyTwoAsJson, GapTextContainer.class);
         assertNotEquals(actualOne.id(), actualTwo.id());
     }
+
+    @Test
+    void updateContainer_shouldReturnUpdatedContainer() throws Exception {
+        var createDTO = GapTextFactory.ofCreateDTO();
+        var createDtoAsJson = mapper.writeValueAsString(createDTO);
+
+        var responseBodyAsJson = mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createDtoAsJson))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        var addedId = mapper.readValue(responseBodyAsJson, GapTextContainer.class).id();
+        var expectedContainer = GapTextFactory.ofGapTextContainerUpdated(addedId);
+        var expectedContainerAsJson = mapper.writeValueAsString(expectedContainer);
+
+        var updateDTO = GapTextFactory.ofUpdateDTO(addedId);
+        var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
+        var urlId = "/" + updateDTO.id();
+
+        mockMvc.perform(put(apiUrl + urlId, updateDTO)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateDtoAsJson))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedContainerAsJson));
+    }
+
+    @Test
+    void updateContainer_shouldReturnApiErrorAndStatus422_whenUrlIdIsBlank() throws Exception {
+        var updateDTO = GapTextFactory.ofUpdateDTO();
+        var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
+        var errorMessages = GapTextFactory.getErrorMessagesIdIsBlank();
+        var invalidUrlId = "/ ";
+
+        mockMvc.perform(put(apiUrl + invalidUrlId, updateDTO)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateDtoAsJson))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(errorMessages)));
+    }
+
+    @Test
+    void updateContainer_shouldReturnApiErrorAndStatus422_whenUrlIdAndContainerIdAreNotEqual() throws Exception {
+        var updateDTO = GapTextFactory.ofUpdateDTO();
+        var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
+        var errorMessages = GapTextFactory.getErrorMessagesIdsAreNotEquals();
+        var otherUrlId = "/otherId";
+
+        mockMvc.perform(put(apiUrl + otherUrlId, updateDTO)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateDtoAsJson))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(errorMessages)));
+    }
+
+    @Test
+    void updateContainer_shouldReturnApiErrorAndStatus422_whenIdNotExist() throws Exception {
+        var updateDTO = GapTextFactory.ofUpdateDTO();
+        var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
+        var errorMessage = GapTextFactory.getErrorMessageIdNotExist();
+        var url = apiUrl + "/" + updateDTO.id();
+
+        mockMvc.perform(put(url, updateDTO)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateDtoAsJson))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.messages").value(errorMessage));
+    }
 }

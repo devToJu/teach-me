@@ -6,8 +6,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import UrlNotFound from "./components/UrlNotFound";
 import GapTextGallery from "./gaptext/components/GapTextGallery";
 import {urlGapText, urlGapTextCreate} from "./components/navigation/PageModel";
-import GapTextCreate from "./gaptext/components/Create/GapTextCreate";
-import GapTextCreateContextProvider from "./gaptext/contexts/GapTextCreateContextProvider";
+import GapTextCreateOrUpdate from "./gaptext/components/createOrUpdate/GapTextCreateOrUpdate";
 
 function App() {
     return (
@@ -17,14 +16,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Welcome/>}/>
                     <Route path={urlGapText} element={<GapTextGallery/>}/>
-                    <Route
-                        path={urlGapTextCreate}
-                        element={
-                            <GapTextCreateContextProvider>
-                                <GapTextCreate/>
-                            </GapTextCreateContextProvider>
-                        }
-                    />
+                    <Route path={urlGapText + "/:id"} element={<GapTextCreateOrUpdate/>}/>
+                    <Route path={urlGapTextCreate} element={<GapTextCreateOrUpdate/>}/>
                     <Route path="*" element={<UrlNotFound/>}/>
                 </Routes>
                 <ResponsiveAppBarBottom/>

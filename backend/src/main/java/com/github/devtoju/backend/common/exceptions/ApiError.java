@@ -16,7 +16,7 @@ public class ApiError {
         this.messages = message;
     }
 
-    public static ApiError create(List<String> message) {
-        return new ApiError(message);
+    public static ApiError of(List<String> messages) {
+        return new ApiError(messages);
     }
 }

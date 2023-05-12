@@ -1,9 +1,13 @@
 import {TextField} from "@mui/material";
-import React, {useContext} from "react";
-import {GapTextCreateContext} from "../../contexts/GapTextCreateContext";
+import React from "react";
 
-export default function Description() {
-    const {description, setDescription} = useContext(GapTextCreateContext)
+type Props = {
+    description: string
+    setDescription: (value: string) => void
+}
+
+export default function Description(props: Props) {
+    const {description, setDescription} = props
 
     return (
         <TextField

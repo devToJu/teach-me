@@ -1,4 +1,4 @@
-import {ReactElement, useCallback, useEffect, useState} from "react";
+import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
 import {toast, ToastContainer} from "react-toastify";
@@ -42,15 +42,32 @@ export default function GapTextContextProvider(props: Props) {
         }
     )
 
+    const updateGapTextContainer = ((container: GapTextContainerModel) => {
+        const putUrl = apiUrl + "/" + container.id
+        axios.put(putUrl, container)
+            .then(response =>
+                setGapTextContainers(prevState =>
+                    prevState.map(item => {
+                        return item.id === container.id ? response.data : item
+                    })
+                )
+            )
+            .then(() => toast.success("Container updated successfully!"))
+            .catch(reason => showError(reason))
+    })
+
     useEffect(
         () => loadAllGapTextContainersCallback(),
         [loadAllGapTextContainersCallback]
     )
 
-    const providerValue: GapTextContextProviderValue = {
-        gapTextContainers: gapTextContainers,
-        saveGapTextContainer: saveGapTextContainer
-    }
+    const providerValue: GapTextContextProviderValue = useMemo(() => {
+        return {
+            gapTextContainers: gapTextContainers,
+            saveGapTextContainer: saveGapTextContainer,
+            updateGapTextContainer
+        }
+    }, [gapTextContainers, saveGapTextContainer, updateGapTextContainer])
 
     return (
         <GapTextContext.Provider value={providerValue}>
