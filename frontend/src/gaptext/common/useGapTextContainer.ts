@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {GapTextContext} from "./GapTextContext";
 import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
 import useGapTexts from "./useGapTexts";
@@ -13,16 +13,21 @@ export default function useGapTextContainer() {
     const [description, setDescription] = useState<string>("")
     const {id} = useParams()
 
+    const setGapTextsRef = useRef(setGapTexts)
+    const gapTextContainersRef = useRef(gapTextContainers)
+
     useEffect(() => {
         if (id !== undefined) {
-            const currentContainer = gapTextContainers.find(container => container.id === id);
+            const currentContainer = gapTextContainersRef.current
+                .find(container => container.id === id);
+
             setDescription(currentContainer?.description || "")
-            setGapTexts(currentContainer?.gapTexts || [])
+            setGapTextsRef.current(currentContainer?.gapTexts || [])
         } else {
             setDescription("")
-            setGapTexts([])
+            setGapTextsRef.current([])
         }
-    }, [])
+    }, [id])
 
     const clearContainer = () => {
         setGapTexts([])
@@ -53,18 +58,16 @@ export default function useGapTextContainer() {
         updateGapTextContainer(updateContainer)
     }
 
-    const isCreateContainer = () => {
-        return id === undefined
-    }
+    const isCreateContainer = id === undefined
 
     return {
         description,
         gapTexts,
+        isCreateContainer,
         setDescription,
         addEmptyRow,
         removeRow,
         updateRow,
-        isCreateContainer,
         clearContainer,
         saveContainer,
         updateContainer
