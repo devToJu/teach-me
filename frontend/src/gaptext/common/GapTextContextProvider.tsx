@@ -28,51 +28,41 @@ export default function GapTextContextProvider(props: Props) {
         toast.error(msg)
     }
 
-    const loadAllGapTextContainers = useCallback(
-        () => {
-            axios.get(apiUrl)
-                .then(response => setGapTextContainers(response.data))
-                .catch(reason => showError(reason))
-        },
-        []
-    )
+    const loadAllGapTextContainers = useCallback(() => {
+        axios.get(apiUrl)
+            .then(response => setGapTextContainers(response.data))
+            .catch(reason => showError(reason))
+    }, [])
 
-    const loadGapTextContainerById = useCallback(
-        (id: string, successCallback: LoadByIdSuccessCallback) => {
-            axios.get(apiUrl + "/" + id)
-                .then(response => successCallback(response.data.description, response.data.gapTexts))
-                .catch(reason => showError(reason))
-        },
-        []
-    )
+    const loadGapTextContainerById = useCallback((id: string, successCallback: LoadByIdSuccessCallback) => {
+        axios.get(apiUrl + "/" + id)
+            .then(response => successCallback(response.data.description, response.data.gapTexts))
+            .catch(reason => showError(reason))
+    }, [])
 
-    const saveGapTextContainer = useCallback(
-        (newContainerDTO: GapTextContainerDtoModel, successCallback: () => void) => {
-            axios.post(apiUrl, newContainerDTO)
-                .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
-                .then(() => toast.success("Container saved successfully!"))
-                .then(() => successCallback())
-                .catch(reason => showError(reason))
-        },
-        []
-    )
+    const saveGapTextContainer = useCallback((
+        newContainerDTO: GapTextContainerDtoModel,
+        successCallback: () => void) => {
+        axios.post(apiUrl, newContainerDTO)
+            .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
+            .then(() => toast.success("Container saved successfully!"))
+            .then(() => successCallback())
+            .catch(reason => showError(reason))
+    }, [])
 
-    const updateGapTextContainer = useCallback(
-        (container: GapTextContainerModel) => {
-            const putUrl = apiUrl + "/" + container.id
-            axios.put(putUrl, container)
-                .then(response =>
-                    setGapTextContainers(prevState =>
-                        prevState.map(item => {
-                            return item.id === container.id ? response.data : item
-                        })
-                    )
+    const updateGapTextContainer = useCallback((container: GapTextContainerModel) => {
+        const putUrl = apiUrl + "/" + container.id
+        axios.put(putUrl, container)
+            .then(response =>
+                setGapTextContainers(prevState =>
+                    prevState.map(item => {
+                        return item.id === container.id ? response.data : item
+                    })
                 )
-                .then(() => toast.success("Container updated successfully!"))
-                .catch(reason => showError(reason))
-        },
-        []
-    )
+            )
+            .then(() => toast.success("Container updated successfully!"))
+            .catch(reason => showError(reason))
+    }, [])
 
     useEffect(
         () => loadAllGapTextContainers(),
