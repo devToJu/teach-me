@@ -18,6 +18,6 @@ public class GapTextContainerIdIsNotValidException extends RuntimeException {
         super("Gap text container ID '" + id + "' is invalid!");
 
         this.urlId  = id;
-        this.containerId = "does not exist";
+        this.containerId = id;
     }
 }

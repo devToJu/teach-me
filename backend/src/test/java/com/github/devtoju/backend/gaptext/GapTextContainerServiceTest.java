@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -98,5 +99,39 @@ class GapTextContainerServiceTest {
 
         var actual = exception.getMessage();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void getContainerById_shouldReturnRequestedContainer() {
+        var requestedContainer = GapTextFactory.ofGapTextContainer();
+        var containerOptional = Optional.of(requestedContainer);
+        var requestedId = requestedContainer.id();
+        var expectedContainer = GapTextFactory.ofGapTextContainer();
+
+        when(gapTextContainerRepo.getById(requestedId))
+                .thenReturn(containerOptional);
+
+        var actualContainer = gapTextContainerService.getContainerById(requestedId);
+
+        verify(gapTextContainerRepo).getById(requestedId);
+        assertEquals(expectedContainer, actualContainer);
+    }
+
+    @Test
+    void getContainerById_shouldThrowException_whenRequestedIdNotExist() {
+        Optional<GapTextContainer> emptyOptional = Optional.empty();
+        var requestedId = GapTextFactory.ofGapTextContainer().id();
+        var expectedErrorMessage = GapTextFactory.getErrorMessageIdNotExist();
+
+        when(gapTextContainerRepo.getById(requestedId))
+                .thenReturn(emptyOptional);
+
+        var actualErrorMessage = assertThrows(
+                GapTextContainerNotExistException.class,
+                () -> gapTextContainerService.getContainerById(requestedId)
+        ).getMessage();
+
+        verify(gapTextContainerRepo).getById(requestedId);
+        assertEquals(expectedErrorMessage, actualErrorMessage);
     }
 }

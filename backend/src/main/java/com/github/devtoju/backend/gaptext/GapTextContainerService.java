@@ -22,7 +22,7 @@ public class GapTextContainerService {
     public GapTextContainer getContainerById(String id) {
         return gapTextContainerRepo
                 .getById(id)
-                .orElseThrow(() -> new GapTextContainerIdIsNotValidException(id));
+                .orElseThrow(() -> new GapTextContainerNotExistException(id));
     }
 
     public GapTextContainer addContainer(GapTextContainerCreateDTO newCreateDTO) {
