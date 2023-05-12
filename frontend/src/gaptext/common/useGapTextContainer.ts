@@ -14,6 +14,9 @@ export function useGapTextContainer() {
     const [description, setDescription] = useState<string>("")
     const {id} = useParams()
 
+    const isCreateContainer = id === undefined
+    const loadContainerById = useRef(loadGapTextContainerById)
+
     const updateContainerAttributes = useRef(
         (description: string, gapTexts: GapTextModel[]) => {
             setDescription(description)
@@ -23,11 +26,9 @@ export function useGapTextContainer() {
 
     useEffect(() => {
         console.log("useGapTextContainer => useEffect called twice? id: ", id, " REMOVE FROM DEPLOY WITH NEXT FEATURE!")
-        if (id !== undefined) {
-            loadGapTextContainerById(id, updateContainerAttributes.current)
-        } else {
-            updateContainerAttributes.current("", [])
-        }
+        isCreateContainer ?
+            updateContainerAttributes.current("", []) :
+            loadContainerById.current(id, updateContainerAttributes.current)
     }, [id])
 
     const clearContainer = () => {
@@ -58,8 +59,6 @@ export function useGapTextContainer() {
 
         updateGapTextContainer(updateContainer)
     }
-
-    const isCreateContainer = id === undefined
 
     return {
         description,

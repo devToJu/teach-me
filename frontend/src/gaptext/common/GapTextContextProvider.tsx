@@ -86,7 +86,7 @@ export default function GapTextContextProvider(props: Props) {
             saveGapTextContainer: saveGapTextContainer,
             updateGapTextContainer: updateGapTextContainer
         }
-    }, [gapTextContainers, saveGapTextContainer, updateGapTextContainer])
+    }, [gapTextContainers, loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer])
 
     return (
         <GapTextContext.Provider value={providerValue}>
