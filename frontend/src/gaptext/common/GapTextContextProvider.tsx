@@ -25,24 +25,23 @@ export default function GapTextContextProvider(props: Props) {
         toast.error(msg)
     }
 
-    const loadAllGapTextContainersCallback = useCallback(() => {
-            axios.get(apiUrl)
-                .then(response => setGapTextContainers(response.data))
-                .catch(reason => showError(reason))
-        },
-        []
-    )
+    const loadAllGapTextContainers = useCallback(() => {
+        axios.get(apiUrl)
+            .then(response => setGapTextContainers(response.data))
+            .catch(reason => showError(reason))
+    }, [])
 
-    const saveGapTextContainer = ((newContainerDTO: GapTextContainerDtoModel, successCallback: () => void) => {
-            axios.post(apiUrl, newContainerDTO)
-                .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
-                .then(() => toast.success("Container saved successfully!"))
-                .then(() => successCallback())
-                .catch(reason => showError(reason))
-        }
-    )
+    const saveGapTextContainer = useCallback((
+        newContainerDTO: GapTextContainerDtoModel,
+        successCallback: () => void) => {
+        axios.post(apiUrl, newContainerDTO)
+            .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
+            .then(() => toast.success("Container saved successfully!"))
+            .then(() => successCallback())
+            .catch(reason => showError(reason))
+    }, [])
 
-    const updateGapTextContainer = ((container: GapTextContainerModel) => {
+    const updateGapTextContainer = useCallback((container: GapTextContainerModel) => {
         const putUrl = apiUrl + "/" + container.id
         axios.put(putUrl, container)
             .then(response =>
@@ -54,18 +53,18 @@ export default function GapTextContextProvider(props: Props) {
             )
             .then(() => toast.success("Container updated successfully!"))
             .catch(reason => showError(reason))
-    })
+    }, [])
 
     useEffect(
-        () => loadAllGapTextContainersCallback(),
-        [loadAllGapTextContainersCallback]
+        () => loadAllGapTextContainers(),
+        [loadAllGapTextContainers]
     )
 
     const providerValue: GapTextContextProviderValue = useMemo(() => {
         return {
             gapTextContainers: gapTextContainers,
             saveGapTextContainer: saveGapTextContainer,
-            updateGapTextContainer
+            updateGapTextContainer: updateGapTextContainer
         }
     }, [gapTextContainers, saveGapTextContainer, updateGapTextContainer])
 

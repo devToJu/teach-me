@@ -22,7 +22,7 @@ export default function GapTextCreateOrUpdate() {
 
     const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        isCreateContainer() ?
+        isCreateContainer ?
             saveContainer() :
             updateContainer()
     }
@@ -35,7 +35,7 @@ export default function GapTextCreateOrUpdate() {
                     pt={5}
                     variant="h6"
                 >
-                    {isCreateContainer() ? "Create a Gap Text" : "Update a Gap Text"}
+                    {isCreateContainer ? "Create a Gap Text" : "Update a Gap Text"}
                 </Typography>
                 <form onSubmit={handleOnSubmit} style={formStyle}>
                     <Description description={description} setDescription={setDescription}/>
@@ -45,7 +45,7 @@ export default function GapTextCreateOrUpdate() {
                         updateRow={updateRow}
                         removeRow={removeRow}
                     />
-                    <ButtonMenu clearContainer={clearContainer} isCreateContainer={isCreateContainer()}/>
+                    <ButtonMenu clearContainer={clearContainer} isCreateContainer={isCreateContainer}/>
                 </form>
             </Paper>
         </Container>
