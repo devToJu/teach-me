@@ -6,15 +6,19 @@ import AddRow from "./AddRow";
 import React from "react";
 import {GapTextModel} from "../../models/GapTextModel";
 
-type Props = {
+export type GapTextCreateOrUpdateContainerProps = {
     gapTexts: GapTextModel[],
     addEmptyRow: () => void,
     updateRow: (value: GapTextModel) => void,
     removeRow: (value: GapTextModel) => void
 }
 
+type Props = {
+    values: GapTextCreateOrUpdateContainerProps
+}
+
 export default function GapTextCreateOrUpdateContainer(props: Props) {
-    const {gapTexts, addEmptyRow, updateRow, removeRow} = props
+    const {gapTexts, addEmptyRow, updateRow, removeRow} = props.values
 
     return (
         <Box sx={boxStyleBorder}>
@@ -29,7 +33,7 @@ export default function GapTextCreateOrUpdateContainer(props: Props) {
                             removeRow={removeRow}
                         />)
                 }
-                <AddRow addEmptyRow={addEmptyRow} hasMoreThanSixRows={gapTexts.length > 6}/>
+                <AddRow addEmptyRow={addEmptyRow} maxRowCountReached={gapTexts.length >= 6}/>
             </Grid>
         </Box>
     )

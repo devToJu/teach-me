@@ -36,18 +36,20 @@ export function useGapTextContainer() {
         setDescription("")
     }
 
-    const saveContainer = () => {
+    const saveContainer = (finishedCallback: () => void) => {
         const containerDTO: GapTextContainerDtoModel = {
             gapTexts: gapTexts,
             description: description
         }
 
         saveGapTextContainer(containerDTO, clearContainer)
+        finishedCallback()
     }
 
-    const updateContainer = () => {
+    const updateContainer = (finishedCallback: () => void) => {
         if (id === undefined) {
             toast.error("Could not update container: ID is undefined")
+            finishedCallback()
             return
         }
 
@@ -58,6 +60,7 @@ export function useGapTextContainer() {
         }
 
         updateGapTextContainer(updateContainer)
+        finishedCallback()
     }
 
     return {

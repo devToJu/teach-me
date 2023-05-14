@@ -1,12 +1,13 @@
 import {Container, Paper, Typography} from "@mui/material";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useState} from "react";
 import {formStyle} from "./GapTextCreateOrUpdateStyles";
-import GapTextCreateOrUpdateContainer from "./GapTextCreateOrUpdateContainer";
+import GapTextCreateOrUpdateContainer, {GapTextCreateOrUpdateContainerProps} from "./GapTextCreateOrUpdateContainer";
 import Description from "./Description";
-import ButtonMenu from "./ButtonMenu";
+import ButtonMenu, {ButtonMenuProps} from "./ButtonMenu";
 import {useGapTextContainer} from "../../common/useGapTextContainer";
 
 export default function GapTextCreateOrUpdate() {
+    const [savingIsInProgress, setSavingIsInProgress] = useState(true)
     const {
         description,
         gapTexts,
@@ -22,9 +23,24 @@ export default function GapTextCreateOrUpdate() {
 
     const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        setSavingIsInProgress(true)
+
         isCreateContainer ?
-            saveContainer() :
-            updateContainer()
+            saveContainer(() => setSavingIsInProgress(false)) :
+            updateContainer(() => setSavingIsInProgress(false))
+    }
+
+    const gapTextCreateOrUpdateContainerProps: GapTextCreateOrUpdateContainerProps = {
+        gapTexts,
+        addEmptyRow,
+        updateRow,
+        removeRow
+    }
+
+    const buttonMenuProps: ButtonMenuProps = {
+        isCreateContainer,
+        savingIsInProgress: savingIsInProgress,
+        clearContainer
     }
 
     return (
@@ -39,13 +55,8 @@ export default function GapTextCreateOrUpdate() {
                 </Typography>
                 <form onSubmit={handleOnSubmit} style={formStyle}>
                     <Description description={description} setDescription={setDescription}/>
-                    <GapTextCreateOrUpdateContainer
-                        gapTexts={gapTexts}
-                        addEmptyRow={addEmptyRow}
-                        updateRow={updateRow}
-                        removeRow={removeRow}
-                    />
-                    <ButtonMenu clearContainer={clearContainer} isCreateContainer={isCreateContainer}/>
+                    <GapTextCreateOrUpdateContainer values={gapTextCreateOrUpdateContainerProps}/>
+                    <ButtonMenu values={buttonMenuProps}/>
                 </form>
             </Paper>
         </Container>
