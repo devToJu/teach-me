@@ -46,10 +46,10 @@ export function useGapTextContainer() {
         finishedCallback()
     }
 
-    const updateContainer = (finishedCallback: () => void) => {
+    const updateContainer = (successCallback: () => void, errorCallback: () => void) => {
         if (id === undefined) {
             toast.error("Could not update container: ID is undefined")
-            finishedCallback()
+            errorCallback()
             return
         }
 
@@ -60,7 +60,7 @@ export function useGapTextContainer() {
         }
 
         updateGapTextContainer(updateContainer)
-        finishedCallback()
+        successCallback()
     }
 
     return {

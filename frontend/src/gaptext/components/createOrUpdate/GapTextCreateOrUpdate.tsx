@@ -5,11 +5,15 @@ import GapTextCreateOrUpdateContainer, {GapTextCreateOrUpdateContainerProps} fro
 import Description from "./Description";
 import ButtonMenu from "./ButtonMenu";
 import {useGapTextContainer} from "../../common/useGapTextContainer";
+import {useNavigate} from "react-router-dom";
+import {urlGapText} from "../../../components/navigation/PageModel";
 
 export default function GapTextCreateOrUpdate() {
     const [anchorEl, setAnchorEl] = React.useState<HTMLFormElement | null>(null);
     const [isInProgress, setIsInProgress] = useState(false)
     const inProgress = isInProgress ? "simple-popover" : undefined;
+    const navigate = useNavigate()
+
     const {
         description,
         gapTexts,
@@ -29,7 +33,7 @@ export default function GapTextCreateOrUpdate() {
 
         isCreateContainer ?
             saveContainer(hideInProgressPopover) :
-            updateContainer(hideInProgressPopover)
+            updateContainer(onUpdateFinished, hideInProgressPopover)
     }
 
     const showInProgressPopover = (coveredElement: HTMLFormElement) => {
@@ -40,6 +44,11 @@ export default function GapTextCreateOrUpdate() {
     const hideInProgressPopover = () => {
         setIsInProgress(false);
         setAnchorEl(null);
+    }
+
+    const onUpdateFinished = () =>  {
+        hideInProgressPopover()
+        navigate(urlGapText)
     }
 
     const gapTextCreateOrUpdateContainerProps: GapTextCreateOrUpdateContainerProps = {
