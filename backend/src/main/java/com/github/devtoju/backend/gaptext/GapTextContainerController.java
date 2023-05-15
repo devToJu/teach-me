@@ -47,4 +47,10 @@ public class GapTextContainerController {
 
         return gapTextContainerService.updateContainer(updateDTO);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteContainer(@PathVariable String id) {
+        gapTextContainerService.deleteContainer(id);
+    }
 }

@@ -39,4 +39,8 @@ public class GapTextContainerService {
         var gapTextContainer = updateDtoToGapTextContainerMapper.apply(updateDTO);
         return gapTextContainerRepo.save(gapTextContainer);
     }
+
+    public void deleteContainer(String id) {
+        gapTextContainerRepo.deleteById(id);
+    }
 }
