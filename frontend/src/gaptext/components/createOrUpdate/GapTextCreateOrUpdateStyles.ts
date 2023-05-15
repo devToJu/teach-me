@@ -14,5 +14,10 @@ export const boxStyleBorder = {
 export const formStyle = {
     paddingBottom: 25,
     paddingLeft: 25,
-    paddingRight: 25
+    paddingRight: 25,
+}
+
+export const formStyleOpacity = {
+    ...formStyle,
+    opacity: 0.5
 }
