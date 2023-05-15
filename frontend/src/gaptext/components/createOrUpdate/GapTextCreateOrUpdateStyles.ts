@@ -16,8 +16,3 @@ export const formStyle = {
     paddingLeft: 25,
     paddingRight: 25,
 }
-
-export const formStyleOpacity = {
-    ...formStyle,
-    opacity: 0.5
-}
