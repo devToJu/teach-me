@@ -22,7 +22,7 @@ public class GapTextContainerService {
     public GapTextContainer getContainerById(String id) {
         return gapTextContainerRepo
                 .getById(id)
-                .orElseThrow(() -> new GapTextContainerNotExistException(id));
+                .orElseThrow(() -> GapTextContainerNotExistException.of(id));
     }
 
     public GapTextContainer addContainer(GapTextContainerCreateDTO newCreateDTO) {
@@ -33,7 +33,7 @@ public class GapTextContainerService {
     public GapTextContainer updateContainer(GapTextContainerUpdateDTO updateDTO) {
         var containerNotExist = !gapTextContainerRepo.existsById(updateDTO.id());
         if (containerNotExist) {
-            throw new GapTextContainerNotExistException(updateDTO.id());
+            throw GapTextContainerNotExistException.ofUpdate(updateDTO.id());
         }
 
         var gapTextContainer = updateDtoToGapTextContainerMapper.apply(updateDTO);
@@ -41,6 +41,11 @@ public class GapTextContainerService {
     }
 
     public void deleteContainer(String id) {
+        var containerNotExist = !gapTextContainerRepo.existsById(id);
+        if (containerNotExist) {
+            throw GapTextContainerNotExistException.ofDelete(id);
+        }
+
         gapTextContainerRepo.deleteById(id);
     }
 }

@@ -106,7 +106,26 @@ public class GapTextFactory {
      * @return error message
      */
     public static String getErrorMessageIdNotExist() {
+        return "Container with ID '" + id + "' does not exist!";
+    }
+
+    /**
+     * Creates an error message for updating when the gap text id does not exist
+     *
+     * @return error message
+     */
+    public static String getErrorMessageIdNotExistUpdate() {
         return "Updating of Gap text container denied: Container with ID '" +
+                id + "' does not exist!";
+    }
+
+    /**
+     * Creates an error message for deleting when the gap text id does not exist
+     *
+     * @return error message
+     */
+    public static String getErrorMessageIdNotExistDelete() {
+        return "Deleting of Gap text container failed: Container with ID '" +
                 id + "' does not exist!";
     }
 
