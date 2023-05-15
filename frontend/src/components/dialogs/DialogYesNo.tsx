@@ -1,19 +1,25 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 
-export type PopupDialogYesNoProps = {
+export type DialogYesNoPropValue = {
     title: string
     description: string,
-    isOpen: boolean,
-    handleYes: () => void,
-    handleNo: () => void
+    isOpen: boolean
+    openDialog: () => void,
+    closeDialog: () => void
 }
 
 type Props = {
-    value: PopupDialogYesNoProps
+    value: DialogYesNoPropValue,
+    onYesCallback: () => void
 }
 
 export default function DialogYesNo(props: Props) {
-    const {title, description, isOpen, handleYes, handleNo} = props.value
+    const {title, description, isOpen, closeDialog} = props.value
+
+    const handleOnYes = () => {
+        closeDialog()
+        props.onYesCallback()
+    }
 
     return (
         <Dialog
@@ -28,8 +34,8 @@ export default function DialogYesNo(props: Props) {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleNo}>No</Button>
-                <Button onClick={handleYes}>Yes</Button>
+                <Button onClick={closeDialog}>No</Button>
+                <Button onClick={handleOnYes}>Yes</Button>
             </DialogActions>
         </Dialog>
     )
