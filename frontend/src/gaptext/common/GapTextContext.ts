@@ -7,7 +7,8 @@ export type GapTextContextProviderValue = {
     gapTextContainers: GapTextContainerModel[],
     loadGapTextContainerById: (id: string, successCallback: LoadByIdSuccessCallback) => void,
     saveGapTextContainer: (newContainerDTO: GapTextContainerDtoModel, successCallback: () => void) => void,
-    updateGapTextContainer: (container: GapTextContainerModel) => void
+    updateGapTextContainer: (container: GapTextContainerModel) => void,
+    deleteGapTextContainer: (id: string) => void
 }
 
 export const GapTextContext = createContext<GapTextContextProviderValue>(
@@ -15,6 +16,7 @@ export const GapTextContext = createContext<GapTextContextProviderValue>(
         gapTextContainers: [],
         loadGapTextContainerById: () => {},
         saveGapTextContainer: () => {},
-        updateGapTextContainer: () => {}
+        updateGapTextContainer: () => {},
+        deleteGapTextContainer: () => {}
     }
 );

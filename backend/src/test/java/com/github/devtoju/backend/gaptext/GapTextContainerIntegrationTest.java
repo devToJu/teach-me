@@ -122,6 +122,39 @@ class GapTextContainerIntegrationTest {
     }
 
     @Test
+    void getContainerById_shouldReturnContainer_whenIdExist() throws Exception {
+        var newCreateDTO = GapTextFactory.ofCreateDTO();
+        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+
+        var addedContainerAsJson = mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newCreateDtoAsJson))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        var addedContainer = mapper.readValue(addedContainerAsJson, GapTextContainer.class);
+        var idToGet = addedContainer.id();
+        var url = apiUrl + "/" + idToGet;
+
+        mockMvc.perform(get(url))
+                .andExpect(status().isOk())
+                .andExpect(content().json(addedContainerAsJson));
+    }
+
+    @Test
+    void getContainerById_shouldReturnApiErrorAndStatus404_whenIdNotExist() throws Exception {
+        var expectedErrorMessage = GapTextFactory.getErrorMessageIdNotExist();
+        var idToGet = GapTextFactory.id;
+        var url = apiUrl + "/" + idToGet;
+
+        mockMvc.perform(get(url))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages").value(expectedErrorMessage));
+    }
+
+    @Test
     void updateContainer_shouldReturnUpdatedContainer() throws Exception {
         var createDTO = GapTextFactory.ofCreateDTO();
         var createDtoAsJson = mapper.writeValueAsString(createDTO);
@@ -181,13 +214,45 @@ class GapTextContainerIntegrationTest {
     void updateContainer_shouldReturnApiErrorAndStatus422_whenIdNotExist() throws Exception {
         var updateDTO = GapTextFactory.ofUpdateDTO();
         var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
-        var errorMessage = GapTextFactory.getErrorMessageIdNotExist();
+        var expectedErrorMessage = GapTextFactory.getErrorMessageIdNotExistUpdate();
         var url = apiUrl + "/" + updateDTO.id();
 
         mockMvc.perform(put(url, updateDTO)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateDtoAsJson))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.messages").value(errorMessage));
+                .andExpect(jsonPath("$.messages").value(expectedErrorMessage));
+    }
+
+    @Test
+    void deleteContainer_shouldReturnApiErrorAndStatus204_whenIdExist() throws Exception {
+        var newCreateDTO = GapTextFactory.ofCreateDTO();
+        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+
+        var addedContainerAsJson = mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newCreateDtoAsJson))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        var addedContainer = mapper.readValue(addedContainerAsJson, GapTextContainer.class);
+        var idToDelete = addedContainer.id();
+        var url = apiUrl + "/" + idToDelete;
+
+        mockMvc.perform(delete(url))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteContainer_shouldReturnApiErrorAndStatus404_whenIdNotExist() throws Exception {
+        var expectedErrorMessage = GapTextFactory.getErrorMessageIdNotExistDelete();
+        var idToDelete = GapTextFactory.id;
+        var url = apiUrl + "/" + idToDelete;
+
+        mockMvc.perform(delete(url))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages").value(expectedErrorMessage));
     }
 }

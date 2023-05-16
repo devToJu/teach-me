@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GapTextContainerNotExistException.class)
     public ResponseEntity<ApiError> handleGapTextContainerNotExistException(GapTextContainerNotExistException e) {
         var messages = List.of(e.getMessage());
-        return createResponseEntity(messages, HttpStatus.UNPROCESSABLE_ENTITY);
+        return createResponseEntity(messages, e.getHttpStatus());
     }
 
     @ExceptionHandler(GapTextContainerIdIsNotValidException.class)

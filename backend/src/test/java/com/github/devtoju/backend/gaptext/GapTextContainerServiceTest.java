@@ -85,7 +85,7 @@ class GapTextContainerServiceTest {
     @Test
     void updateContainer_shouldThrowException_whenContainerDoesNotExist() {
         var updateDto = GapTextFactory.ofUpdateDTO();
-        var expected = GapTextFactory.getErrorMessageIdNotExist();
+        var expected = GapTextFactory.getErrorMessageIdNotExistUpdate();
 
         when(gapTextContainerRepo.existsById(updateDto.id()))
                 .thenReturn(false);
@@ -132,6 +132,39 @@ class GapTextContainerServiceTest {
         ).getMessage();
 
         verify(gapTextContainerRepo).getById(requestedId);
+        assertEquals(expectedErrorMessage, actualErrorMessage);
+    }
+
+    @Test
+    void deleteContainer_whenIdExist() {
+        var containerToDelete = GapTextFactory.ofGapTextContainer();
+        var idToDelete = containerToDelete.id();
+
+        when(gapTextContainerRepo.existsById(idToDelete))
+                .thenReturn(true);
+
+        gapTextContainerService.deleteContainer(idToDelete);
+
+        verify(gapTextContainerRepo).existsById(idToDelete);
+        verify(gapTextContainerRepo).deleteById(idToDelete);
+    }
+
+    @Test
+    void deleteContainer_shouldThrowException_whenIdDoesNotExist() {
+        var containerToDelete = GapTextFactory.ofGapTextContainer();
+        var idToDelete = containerToDelete.id();
+        var expectedErrorMessage = GapTextFactory.getErrorMessageIdNotExistDelete();
+
+        when(gapTextContainerRepo.existsById(idToDelete))
+                .thenReturn(false);
+
+        var actualErrorMessage = assertThrows(
+                GapTextContainerNotExistException.class,
+                () -> gapTextContainerService.deleteContainer(idToDelete)
+        ).getMessage();
+
+        verify(gapTextContainerRepo).existsById(idToDelete);
+        verify(gapTextContainerRepo, never()).getById(idToDelete);
         assertEquals(expectedErrorMessage, actualErrorMessage);
     }
 }

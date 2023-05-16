@@ -64,6 +64,14 @@ export default function GapTextContextProvider(props: Props) {
             .catch(reason => showError(reason))
     }, [])
 
+    const deleteGapTextContainer = useCallback((id: string) => {
+        const url = apiUrl + "/" + id
+        axios.delete(url)
+            .then(() => setGapTextContainers(prevState =>
+                prevState.filter(container => container.id !== id)))
+            .catch(reason => showError(reason))
+    }, [])
+
     useEffect(
         () => loadAllGapTextContainers(),
         [loadAllGapTextContainers]
@@ -74,7 +82,8 @@ export default function GapTextContextProvider(props: Props) {
             gapTextContainers: gapTextContainers,
             loadGapTextContainerById: loadGapTextContainerById,
             saveGapTextContainer: saveGapTextContainer,
-            updateGapTextContainer: updateGapTextContainer
+            updateGapTextContainer: updateGapTextContainer,
+            deleteGapTextContainer: deleteGapTextContainer
         }
     }, [gapTextContainers, loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer])
 
