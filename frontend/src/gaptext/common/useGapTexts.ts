@@ -2,7 +2,7 @@ import {useState} from "react";
 import {GapTextModel} from "../models/GapTextModel";
 import {v4 as uuidv4} from "uuid";
 
-export default function useGapTexts() {
+export function useGapTexts() {
     const [gapTexts, setGapTexts] = useState<GapTextModel[]>([])
 
     const addEmptyRow = () => {
