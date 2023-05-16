@@ -1,12 +1,19 @@
-import {Container, Paper, Typography} from "@mui/material";
-import React, {FormEvent} from "react";
-import {formStyle} from "./GapTextCreateOrUpdateStyles";
-import GapTextCreateOrUpdateContainer from "./GapTextCreateOrUpdateContainer";
+import {Box, CircularProgress, Container, Paper, Popover, Typography} from "@mui/material";
+import React, {FormEvent, useState} from "react";
+import {formStyle, formStyleOpacity} from "./GapTextCreateOrUpdateStyles";
+import GapTextCreateOrUpdateContainer, {GapTextCreateOrUpdateContainerProps} from "./GapTextCreateOrUpdateContainer";
 import Description from "./Description";
 import ButtonMenu from "./ButtonMenu";
 import {useGapTextContainer} from "../../common/useGapTextContainer";
+import {useNavigate} from "react-router-dom";
+import {urlGapText} from "../../../components/navigation/PageModel";
 
 export default function GapTextCreateOrUpdate() {
+    const [anchorEl, setAnchorEl] = React.useState<HTMLFormElement | null>(null);
+    const [isInProgress, setIsInProgress] = useState(false)
+    const inProgress = isInProgress ? "simple-popover" : undefined;
+    const navigate = useNavigate()
+
     const {
         description,
         gapTexts,
@@ -22,9 +29,33 @@ export default function GapTextCreateOrUpdate() {
 
     const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        showInProgressPopover(event.currentTarget)
+
         isCreateContainer ?
-            saveContainer() :
-            updateContainer()
+            saveContainer(hideInProgressPopover) :
+            updateContainer(onUpdateFinished, hideInProgressPopover)
+    }
+
+    const showInProgressPopover = (coveredElement: HTMLFormElement) => {
+        setAnchorEl(coveredElement);
+        setIsInProgress(true);
+    }
+
+    const hideInProgressPopover = () => {
+        setIsInProgress(false);
+        setAnchorEl(null);
+    }
+
+    const onUpdateFinished = () =>  {
+        hideInProgressPopover()
+        navigate(urlGapText)
+    }
+
+    const gapTextCreateOrUpdateContainerProps: GapTextCreateOrUpdateContainerProps = {
+        gapTexts,
+        addEmptyRow,
+        updateRow,
+        removeRow
     }
 
     return (
@@ -37,16 +68,33 @@ export default function GapTextCreateOrUpdate() {
                 >
                     {isCreateContainer ? "Create a Gap Text" : "Update a Gap Text"}
                 </Typography>
-                <form onSubmit={handleOnSubmit} style={formStyle}>
+                <form
+                    aria-describedby={inProgress}
+                    onSubmit={handleOnSubmit}
+                    style={isInProgress ? formStyleOpacity : formStyle}
+                >
                     <Description description={description} setDescription={setDescription}/>
-                    <GapTextCreateOrUpdateContainer
-                        gapTexts={gapTexts}
-                        addEmptyRow={addEmptyRow}
-                        updateRow={updateRow}
-                        removeRow={removeRow}
-                    />
+                    <GapTextCreateOrUpdateContainer values={gapTextCreateOrUpdateContainerProps}/>
                     <ButtonMenu clearContainer={clearContainer} isCreateContainer={isCreateContainer}/>
                 </form>
+                <Popover
+                    id={inProgress}
+                    open={isInProgress}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'center',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'center',
+                        horizontal: 'center',
+                    }}
+                >
+                    <Box sx={{display: 'flex', justifyContent: 'center', pt: 2}}>
+                        <CircularProgress/>
+                    </Box>
+                    <Typography sx={{p: 2}}>Processing data...</Typography>
+                </Popover>
             </Paper>
         </Container>
     )

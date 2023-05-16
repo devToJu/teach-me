@@ -4,18 +4,18 @@ import React from "react";
 
 type Props = {
     addEmptyRow: () => void
-    hasMoreThanSixRows: boolean,
+    maxRowCountReached: boolean,
 }
 
 export default function AddRow(props: Props) {
-    const {addEmptyRow, hasMoreThanSixRows} = props
+    const {addEmptyRow, maxRowCountReached} = props
     return (
         <Grid item xs={2}>
             <Button
                 variant="outlined"
                 startIcon={<AddIcon/>}
                 onClick={addEmptyRow}
-                disabled={hasMoreThanSixRows}
+                disabled={maxRowCountReached}
             >
                 Add
             </Button>
