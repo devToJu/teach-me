@@ -78,14 +78,22 @@ export default function GapTextContextProvider(props: Props) {
     )
 
     const providerValue: GapTextContextProviderValue = useMemo(() => {
-        return {
-            gapTextContainers: gapTextContainers,
-            loadGapTextContainerById: loadGapTextContainerById,
-            saveGapTextContainer: saveGapTextContainer,
-            updateGapTextContainer: updateGapTextContainer,
-            deleteGapTextContainer: deleteGapTextContainer
-        }
-    }, [gapTextContainers, loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer])
+            return {
+                gapTextContainers: gapTextContainers,
+                loadGapTextContainerById: loadGapTextContainerById,
+                saveGapTextContainer: saveGapTextContainer,
+                updateGapTextContainer: updateGapTextContainer,
+                deleteGapTextContainer: deleteGapTextContainer
+            }
+        },
+        [
+            gapTextContainers,
+            loadGapTextContainerById,
+            saveGapTextContainer,
+            updateGapTextContainer,
+            deleteGapTextContainer
+        ]
+    )
 
     return (
         <GapTextContext.Provider value={providerValue}>
