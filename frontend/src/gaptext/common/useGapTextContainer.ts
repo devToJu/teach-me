@@ -25,7 +25,6 @@ export function useGapTextContainer() {
     )
 
     useEffect(() => {
-        console.log("useGapTextContainer => useEffect called twice? id: ", id, " REMOVE FROM DEPLOY WITH NEXT FEATURE!")
         isCreateContainer ?
             updateContainerAttributes.current("", []) :
             loadContainerById.current(id, updateContainerAttributes.current)
