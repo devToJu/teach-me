@@ -1,4 +1,4 @@
-package com.github.devtoju.backend.security;
+package com.github.devtoju.backend.security.jwt;
 
 import io.jsonwebtoken.*;
 import jakarta.servlet.*;

@@ -1,5 +1,7 @@
 package com.github.devtoju.backend.security;
 
+import com.github.devtoju.backend.security.jwt.JwtService;
+import com.github.devtoju.backend.security.models.LoginData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
 import org.springframework.web.bind.annotation.*;
