@@ -18,10 +18,10 @@ public class UserInDbAuthException extends RuntimeException {
 
     public UserInDbAuthException(RuntimeException e) {
         super("Authentication request rejected: " + e.getMessage());
-        httpStatus = parseHttpStatusFromException(e);
+        httpStatus = mapExceptionToHttpStatus(e);
     }
 
-    private HttpStatus parseHttpStatusFromException(RuntimeException e) {
+    private HttpStatus mapExceptionToHttpStatus(RuntimeException e) {
         return httpStatusMapping.getOrDefault(e.getClass(), HttpStatus.BAD_REQUEST);
     }
 }
