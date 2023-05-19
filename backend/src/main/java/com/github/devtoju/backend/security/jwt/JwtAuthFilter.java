@@ -23,16 +23,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        var authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
         // TODO: REMOVE 2 Lines
         System.out.println("authHeader: " + authHeader);
         System.out.println("GetAuthType: " + request.getAuthType());
 
-        var userIsLoggedIn = SecurityContextHolder.getContext().getAuthentication() != null;
-        var noUserToLogin = authHeader == null;
+        var isUserIsLoggedIn = SecurityContextHolder.getContext().getAuthentication() != null;
+        var hasNoUserToLogin = authHeader == null;
 
-        if (userIsLoggedIn || noUserToLogin) {
+        if (isUserIsLoggedIn || hasNoUserToLogin) {
             filterChain.doFilter(request, response);
             return;
         }

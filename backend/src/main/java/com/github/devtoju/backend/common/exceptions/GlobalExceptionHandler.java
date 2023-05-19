@@ -1,6 +1,7 @@
 package com.github.devtoju.backend.common.exceptions;
 
 import com.github.devtoju.backend.gaptext.exceptions.*;
+import com.github.devtoju.backend.security.UserInDbAuthException;
 import com.github.devtoju.backend.security.jwt.JwtAuthSecurityException;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
@@ -42,6 +43,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleJwtAuthSecurityException(JwtAuthSecurityException e) {
         var messages = List.of(e.getMessage());
         return createResponseEntity(messages, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(UserInDbAuthException.class)
+    public ResponseEntity<ApiError> handleUserInDbAuthException(UserInDbAuthException e) {
+        var messages = List.of(e.getMessage());
+        return createResponseEntity(messages, e.getHttpStatus());
     }
 
     private ResponseEntity<ApiError> createResponseEntity(List<String> messages, HttpStatus status) {

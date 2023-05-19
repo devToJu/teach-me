@@ -20,7 +20,13 @@ public class SecurityController {
                 data.password()
         );
 
-        authenticationManager.authenticate(authenticationToken);
+        try {
+            authenticationManager.authenticate(authenticationToken);
+        }
+        catch (DisabledException | LockedException | BadCredentialsException e) {
+            throw new UserInDbAuthException(e);
+        }
+
         return jwtService.createToken(data.username());
     }
 }
