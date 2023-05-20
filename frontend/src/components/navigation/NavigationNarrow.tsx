@@ -1,22 +1,22 @@
-import {Box, IconButton, Menu, Typography} from "@mui/material";
+import {Box, IconButton, Menu} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import PageMenu from "./PageMenu";
 import React from "react";
-import {useNavigate} from "react-router-dom";
-import {PageModel} from "./PageModel";
+import {topRight} from "../models/PopoverStartPositions";
+import {PageModelGroup} from "./PageModel";
 
 type Props = {
-    anchorElNav: null | HTMLElement,
-    handleCloseNavMenu: () => void,
-    handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void,
-    pages: PageModel[]
+    pages: PageModelGroup
 }
 export default function NavigationNarrow(props: Props) {
-    const navigation = useNavigate();
+    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
-    const handleCloseNavMenu = (url: string) => {
-        navigation(url)
-        props.handleCloseNavMenu()
+    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElNav(event.currentTarget);
+    }
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
     }
 
     return (
@@ -26,34 +26,23 @@ export default function NavigationNarrow(props: Props) {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={props.handleOpenNavMenu}
+                onClick={handleOpenNavMenu}
                 color="inherit"
             >
                 <MenuIcon/>
             </IconButton>
             <Menu
                 id="menu-appbar"
-                anchorEl={props.anchorElNav}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                open={Boolean(props.anchorElNav)}
-                onClose={props.handleCloseNavMenu}
-                sx={{
-                    display: {xs: 'block', md: 'none'},
-                }}
+                anchorEl={anchorElNav}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{display: {xs: 'block', md: 'none'},}}
             >
-                {props.pages.map((page) => (
-                    <MenuItem key={page.name} onClick={() => handleCloseNavMenu(page.url)}>
-                        <Typography textAlign="center">{page.name}</Typography>
-                    </MenuItem>
-                ))}
+                <PageMenu
+                    pages={props.pages}
+                    menuStartPosition={topRight}
+                    onCloseCallback={handleCloseNavMenu}
+                />
             </Menu>
         </Box>
     )

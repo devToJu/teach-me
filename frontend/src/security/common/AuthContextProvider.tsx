@@ -51,6 +51,7 @@ export default function AuthContextProvider(props: Props) {
     const providerValue: AuthContextProviderValue = useMemo(() => {
         return {
             token,
+            isAuthenticated: token !== undefined && token !== "",
             loginInputValues: {username, password, setUsername, setPassword},
             login
         }

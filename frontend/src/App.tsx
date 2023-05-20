@@ -8,6 +8,7 @@ import GapTextGallery from "./gaptext/components/GapTextGallery";
 import {urlGapText, urlGapTextCreate, urlLogin} from "./components/navigation/PageModel";
 import GapTextCreateOrUpdate from "./gaptext/components/createOrUpdate/GapTextCreateOrUpdate";
 import SignIn from "./security/SignIn";
+import ProtectedRoutes from "./security/ProtectedRoutes";
 
 function App() {
     return (
@@ -17,9 +18,11 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Welcome/>}/>
                     <Route path={urlLogin} element={<SignIn/>}/>
-                    <Route path={urlGapText} element={<GapTextGallery/>}/>
-                    <Route path={urlGapText + "/:id"} element={<GapTextCreateOrUpdate/>}/>
-                    <Route path={urlGapTextCreate} element={<GapTextCreateOrUpdate/>}/>
+                    <Route element={<ProtectedRoutes/>}>
+                        <Route path={urlGapText} element={<GapTextGallery/>}/>
+                        <Route path={urlGapText + "/:id"} element={<GapTextCreateOrUpdate/>}/>
+                        <Route path={urlGapTextCreate} element={<GapTextCreateOrUpdate/>}/>
+                    </Route>
                     <Route path="*" element={<UrlNotFound/>}/>
                 </Routes>
                 <ResponsiveAppBarBottom/>

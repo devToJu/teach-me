@@ -1,32 +1,21 @@
-import {Box, Button} from "@mui/material";
+import {Box} from "@mui/material";
 import React from "react";
-import {useNavigate} from "react-router-dom";
-import {PageModel} from "./PageModel";
+import {PageModelGroup} from "./PageModel";
+import PageMenu from "./PageMenu";
+import {bottomLeft} from "../models/PopoverStartPositions";
 
 type Props = {
-    handleCloseNavMenu: () => void,
-    pages: PageModel[]
+    pages: PageModelGroup
 }
 
 export default function NavigationWide(props: Props) {
-    const navigation = useNavigate();
-
-    const handleCloseNavMenu = (url: string) => {
-        navigation(url)
-        props.handleCloseNavMenu()
-    }
-
     return (
         <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-            {props.pages.map((page) => (
-                <Button
-                    key={page.name}
-                    onClick={() => handleCloseNavMenu(page.url)}
-                    sx={{my: 2, color: 'white', display: 'block'}}
-                >
-                    {page.name}
-                </Button>
-            ))}
+            <PageMenu
+                pages={props.pages}
+                menuStartPosition={bottomLeft}
+                onCloseCallback={() => {}}
+            />
         </Box>
     )
 }
