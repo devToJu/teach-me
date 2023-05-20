@@ -5,3 +5,4 @@ export type PageModel = {
 
 export const urlGapText : string = "/gaptext"
 export const urlGapTextCreate: string = "/gaptext/create"
+export const urlLogin: string = "/signin"

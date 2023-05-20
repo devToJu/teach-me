@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -23,12 +24,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-
-        // TODO: REMOVE 2 Lines
-        System.out.println("authHeader: " + authHeader);
-        System.out.println("GetAuthType: " + request.getAuthType());
-
+        var authHeader = request.getHeader("Authorization");
         var isUserIsLoggedIn = SecurityContextHolder.getContext().getAuthentication() != null;
         var hasNoUserToLogin = authHeader == null;
 
@@ -54,7 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private void loginUser(String username) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(username, "");
+        var authenticationToken = new UsernamePasswordAuthenticationToken(username, "", List.of());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 }
