@@ -2,11 +2,14 @@ package com.github.devtoju.backend.gaptext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
+import com.github.devtoju.backend.security.SecurityFactory;
+import com.github.devtoju.backend.security.UserInDbRepo;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -30,6 +33,9 @@ class GapTextContainerIntegrationTest {
 
     @Autowired
     ObjectMapper mapper;
+
+    @Autowired
+    UserInDbRepo repo;
 
     @Test
     void getAllContainers_shouldReturnStatus403_whenNotLoggedIn() throws Exception {
@@ -56,6 +62,27 @@ class GapTextContainerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newCreateDtoAsJson))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void getAllContainers_shouldReturnEmptyList_whenJwtTokenIsValid() throws Exception {
+        var userToAdd = SecurityFactory.ofUserInDb();
+        repo.save(userToAdd);
+
+        var loginDataAsJson = SecurityFactory.ofLoginDataAsJson();
+        var token = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginDataAsJson))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        mockMvc.perform(get(apiUrl)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
     }
 
     @Test

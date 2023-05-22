@@ -18,12 +18,12 @@ public class SecurityFactory {
     static final String errorBadCredentials = "Authentication request rejected: Bad credentials";
     static final String errorUserNotFound = "User with username '" + username + "' not found!";
 
-    static String ofLoginDataAsJson() throws Exception {
+    public static String ofLoginDataAsJson() throws Exception {
         var loginData = new LoginData(username, pw);
         return mapper.writeValueAsString(loginData);
     }
 
-    static UserInDb ofUserInDb() {
+    public static UserInDb ofUserInDb() {
         var pwHash = encoder.encode(SecurityFactory.pw);
         return new UserInDb("id", username, pwHash);
     }
