@@ -4,8 +4,8 @@ import PageMenu from "./PageMenu";
 import React, {useContext} from "react";
 import {topRight} from "../models/PopoverStartPositions";
 import {PageModelGroup} from "./PageModel";
-import ShowWhenAuthenticated from "../../gaptext/models/security/components/ShowWhenAuthenticated";
-import {AuthContext} from "../../gaptext/models/security/common/AuthContext";
+import ShowWhenAuthenticated from "../../security/components/ShowWhenAuthenticated";
+import {AuthContext} from "../../security/common/AuthContext";
 
 type Props = {
     pages: PageModelGroup

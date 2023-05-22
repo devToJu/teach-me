@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {AuthContext, AuthContextProviderValue} from "./AuthContext";
 import axios from "axios";
 import {LoginData} from "../models/LoginData";
-import {Consumer, Run} from "../../../../components/models/CallbackTypes";
+import {Consumer, Run} from "../../components/models/CallbackTypes";
 
 type Props = {
     children: ReactElement
@@ -29,9 +29,9 @@ export default function AuthContextProvider(props: Props) {
         })
     }
 
-    const saveToken = (data: string) => {
-        localStorage.setItem(tokenStorageKey, data)
-        setToken(data)
+    const saveToken = (token: string) => {
+        localStorage.setItem(tokenStorageKey, token)
+        setToken(token)
     }
 
     const loginData: LoginData = useMemo(() => {

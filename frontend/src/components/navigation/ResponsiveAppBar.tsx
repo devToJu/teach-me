@@ -5,7 +5,7 @@ import LogoWide from "./LogoWide";
 import NavigationNarrow from "./NavigationNarrow";
 import NavigationWide from "./NavigationWide";
 import LogoNarrow from "./LogoNarrow";
-import SignInButton from "../../gaptext/models/security/components/SignInButton";
+import SignInButton from "../../security/components/SignInButton";
 
 
 const pages: PageModelGroup = {

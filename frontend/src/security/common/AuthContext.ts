@@ -1,6 +1,6 @@
 import {defaultLoginInputValues, LoginInputValues} from "../models/LoginInputValues";
 import {createContext} from "react";
-import {Consumer, Run} from "../../../../components/models/CallbackTypes";
+import {Consumer, Run} from "../../components/models/CallbackTypes";
 
 export type AuthContextProviderValue = {
     isAuthenticated: boolean,

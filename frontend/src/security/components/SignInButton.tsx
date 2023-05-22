@@ -1,7 +1,7 @@
 import {Button} from "@mui/material";
 import React, {useContext} from "react";
 import {useNavigate} from "react-router-dom";
-import {urlLogin} from "../../../../components/navigation/PageModel";
+import {urlLogin} from "../../components/navigation/PageModel";
 import {AuthContext} from "../common/AuthContext";
 
 export default function SignInButton() {

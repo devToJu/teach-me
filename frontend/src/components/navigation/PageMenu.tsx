@@ -3,7 +3,7 @@ import React from "react";
 import {PageModelGroup} from "./PageModel";
 import PageMenuItems from "./PageMenuItems";
 import {Run} from "../models/CallbackTypes";
-import ShowWhenAuthenticated from "../../gaptext/models/security/components/ShowWhenAuthenticated";
+import ShowWhenAuthenticated from "../../security/components/ShowWhenAuthenticated";
 
 type Props = {
     pages: PageModelGroup,

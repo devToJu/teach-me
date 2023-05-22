@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GapTextContextProvider from "./gaptext/common/GapTextContextProvider";
-import AuthContextProvider from "./gaptext/models/security/common/AuthContextProvider";
+import AuthContextProvider from "./security/common/AuthContextProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
