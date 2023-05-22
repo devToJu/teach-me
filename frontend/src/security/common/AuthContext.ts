@@ -6,10 +6,12 @@ export type AuthContextProviderValue = {
     isAuthenticated: boolean,
     loginInputValues: LoginInputValues
     login: (successCallback: Consumer<string>, finishedCallback: Run) => void
+    logout: Run
 }
 
 export const AuthContext = createContext<AuthContextProviderValue>({
     isAuthenticated: false,
     loginInputValues: defaultLoginInputValues,
-    login: () => {}
+    login: () => {},
+    logout: () => {}
 })

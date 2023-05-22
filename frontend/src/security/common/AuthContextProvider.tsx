@@ -29,6 +29,11 @@ export default function AuthContextProvider(props: Props) {
         })
     }
 
+    const clearInput = () => {
+        setUsername("")
+        setPassword("")
+    }
+
     const saveToken = (token: string) => {
         localStorage.setItem(tokenStorageKey, token)
         setToken(token)
@@ -45,17 +50,24 @@ export default function AuthContextProvider(props: Props) {
                 saveToken(token)
                 successCallback(token)
             })
+            .then(clearInput)
             .catch(reason => showError(reason.response.data))
-            .finally(() => finishedCallback())
+            .finally(finishedCallback)
     }, [loginData])
+
+    const logout = useCallback(() => {
+        localStorage.removeItem(tokenStorageKey)
+        setToken("")
+    }, [])
 
     const providerValue: AuthContextProviderValue = useMemo(() => {
         return {
             isAuthenticated: token !== undefined && token !== "",
             loginInputValues: {username, password, setUsername, setPassword},
-            login
+            login,
+            logout
         }
-    }, [username, password, token, login])
+    }, [username, password, token, login, logout])
 
     return (
         <AuthContext.Provider value={providerValue}>
