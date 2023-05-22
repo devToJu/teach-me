@@ -1,4 +1,4 @@
-import {Consumer} from "../../components/models/CallbackTypes";
+import {Consumer} from "../../../../components/models/CallbackTypes";
 
 export type LoginInputValues = {
     username: string,

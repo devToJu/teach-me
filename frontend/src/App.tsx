@@ -7,8 +7,8 @@ import UrlNotFound from "./components/UrlNotFound";
 import GapTextGallery from "./gaptext/components/GapTextGallery";
 import {urlGapText, urlGapTextCreate, urlLogin} from "./components/navigation/PageModel";
 import GapTextCreateOrUpdate from "./gaptext/components/createOrUpdate/GapTextCreateOrUpdate";
-import SignIn from "./security/SignIn";
-import ProtectedRoutes from "./security/ProtectedRoutes";
+import SignIn from "./gaptext/models/security/components/SignIn";
+import ProtectedRoutes from "./gaptext/models/security/components/ProtectedRoutes";
 
 function App() {
     return (

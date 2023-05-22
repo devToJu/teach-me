@@ -1,11 +1,12 @@
-import {AppBar, Container, Toolbar} from "@mui/material";
-import LogoNarrow from "./LogoNarrow";
-import LogoWide from "./LogoWide";
+import {PageModelGroup, urlGapText, urlGapTextCreate} from "./PageModel";
 import React from "react";
+import {AppBar, Container, Toolbar} from "@mui/material";
+import LogoWide from "./LogoWide";
 import NavigationNarrow from "./NavigationNarrow";
 import NavigationWide from "./NavigationWide";
-import {PageModelGroup, urlGapText, urlGapTextCreate} from "./PageModel";
-import LoginButton from "../../security/LoginButton";
+import LogoNarrow from "./LogoNarrow";
+import SignInButton from "../../gaptext/models/security/components/SignInButton";
+
 
 const pages: PageModelGroup = {
     name: "Gap Text",
@@ -24,9 +25,9 @@ export default function ResponsiveAppBar() {
                     <NavigationNarrow pages={pages}/>
                     <NavigationWide pages={pages}/>
                     <LogoNarrow/>
-                    <LoginButton/>
+                    <SignInButton/>
                 </Toolbar>
             </Container>
         </AppBar>
-    );
+    )
 }

@@ -1,10 +1,10 @@
-import {ReactElement, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
 import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {AuthContext, AuthContextProviderValue} from "./AuthContext";
 import axios from "axios";
 import {LoginData} from "../models/LoginData";
-import {Run} from "../../components/models/CallbackTypes";
+import {Consumer, Run} from "../../../../components/models/CallbackTypes";
 
 type Props = {
     children: ReactElement
@@ -34,23 +34,23 @@ export default function AuthContextProvider(props: Props) {
         setToken(data)
     }
 
-    const saveTokenRef = useRef(saveToken)
-
     const loginData: LoginData = useMemo(() => {
         return {username, password}
     }, [username, password])
 
-    const login = useCallback((successCallback: Run, finishedCallback: Run) => {
+    const login = useCallback((successCallback: Consumer<string>, finishedCallback: Run) => {
         axios.post(apiUrl, loginData)
-            .then(response => saveTokenRef.current(response.data))
-            .then(() => successCallback())
+            .then(response => {
+                const token = response.data
+                saveToken(token)
+                successCallback(token)
+            })
             .catch(reason => showError(reason.response.data))
             .finally(() => finishedCallback())
     }, [loginData])
 
     const providerValue: AuthContextProviderValue = useMemo(() => {
         return {
-            token,
             isAuthenticated: token !== undefined && token !== "",
             loginInputValues: {username, password, setUsername, setPassword},
             login
