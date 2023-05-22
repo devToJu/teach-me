@@ -1,4 +1,4 @@
-package com.github.devtoju.backend.security;
+package com.github.devtoju.backend.security.common;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

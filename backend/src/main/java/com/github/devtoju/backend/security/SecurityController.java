@@ -1,5 +1,6 @@
 package com.github.devtoju.backend.security;
 
+import com.github.devtoju.backend.security.common.UserInDbAuthException;
 import com.github.devtoju.backend.security.jwt.JwtService;
 import com.github.devtoju.backend.security.models.LoginData;
 import lombok.RequiredArgsConstructor;

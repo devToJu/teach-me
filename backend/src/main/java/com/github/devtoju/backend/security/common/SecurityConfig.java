@@ -1,4 +1,4 @@
-package com.github.devtoju.backend.security;
+package com.github.devtoju.backend.security.common;
 
 import com.github.devtoju.backend.security.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;

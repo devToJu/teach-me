@@ -1,7 +1,7 @@
 package com.github.devtoju.backend.common.exceptions;
 
 import com.github.devtoju.backend.gaptext.exceptions.*;
-import com.github.devtoju.backend.security.UserInDbAuthException;
+import com.github.devtoju.backend.security.common.UserInDbAuthException;
 import com.github.devtoju.backend.security.jwt.JwtAuthSecurityException;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
