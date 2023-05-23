@@ -26,7 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         var authHeader = request.getHeader("Authorization");
         var isUserIsLoggedIn = SecurityContextHolder.getContext().getAuthentication() != null;
-        var hasNoUserToLogin = authHeader == null;
+        var hasNoUserToLogin = authHeader.isBlank();
 
         if (isUserIsLoggedIn || hasNoUserToLogin) {
             filterChain.doFilter(request, response);

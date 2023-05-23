@@ -6,7 +6,7 @@ import {Consumer, Run} from "../../components/models/CallbackTypes";
 
 export type GapTextContextProviderValue = {
     gapTextContainers: GapTextContainerModel[],
-    loadAllGapTextContainers: Consumer<string>
+    loadAllGapTextContainers: Run
     loadGapTextContainerById: (id: string, successCallback: LoadByIdSuccessCallback) => void,
     saveGapTextContainer: (newContainerDTO: GapTextContainerDtoModel, successCallback: Run) => void,
     updateGapTextContainer: Consumer<GapTextContainerModel>,

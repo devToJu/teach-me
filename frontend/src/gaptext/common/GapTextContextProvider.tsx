@@ -1,4 +1,4 @@
-import {ReactElement, useCallback, useMemo, useState} from "react";
+import {ReactElement, useCallback, useContext, useMemo, useState} from "react";
 import axios from "axios";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
 import {toast, ToastContainer} from "react-toastify";
@@ -6,6 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import {GapTextContext, GapTextContextProviderValue} from "./GapTextContext"
 import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
 import {GapTextModel} from "../models/GapTextModel";
+import {AuthContext} from "../../security/common/AuthContext";
+import {Run} from "../../components/models/CallbackTypes";
 
 export type LoadByIdSuccessCallback = (description: string, gapTexts: GapTextModel[]) => void
 
@@ -14,6 +16,7 @@ type Props = {
 }
 
 export default function GapTextContextProvider(props: Props) {
+    const {authHeader} = useContext(AuthContext)
     const [gapTextContainers, setGapTextContainers] = useState<GapTextContainerModel[]>([])
     const apiUrl: string = "/api/gaptextcontainer"
 
@@ -26,25 +29,26 @@ export default function GapTextContextProvider(props: Props) {
         })
     }
 
-    const loadAllGapTextContainers = useCallback((token: string) => {
-        axios.get(apiUrl, {headers: {Authorization: "Bearer " + token}})
+    const loadAllGapTextContainers = useCallback(() => {
+        axios.get(apiUrl, authHeader)
             .then(response => setGapTextContainers(response.data))
             .catch(reason => showError(reason.response.data))
-    }, [])
+    }, [authHeader])
 
     const loadGapTextContainerById = useCallback((id: string, successCallback: LoadByIdSuccessCallback) => {
-        axios.get(apiUrl + "/" + id)
+        axios.get(apiUrl + "/" + id, authHeader)
             .then(response => successCallback(response.data.description, response.data.gapTexts))
             .catch(reason => showError(reason.response.data))
     }, [])
 
     const saveGapTextContainer = useCallback((
         newContainerDTO: GapTextContainerDtoModel,
-        successCallback: () => void) => {
-        axios.post(apiUrl, newContainerDTO)
+        successCallback: Run
+    ) => {
+        axios.post(apiUrl, newContainerDTO, authHeader)
             .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
-            .then(() => toast.success("Container saved successfully!"))
-            .then(() => successCallback())
+            .then(() => toast.success("Gap Text saved successfully!"))
+            .then(successCallback)
             .catch(reason => showError(reason.response.data))
     }, [])
 

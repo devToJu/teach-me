@@ -4,7 +4,6 @@ import "react-toastify/dist/ReactToastify.css";
 import {AuthContext, AuthContextProviderValue} from "./AuthContext";
 import axios from "axios";
 import {LoginData} from "../models/LoginData";
-import {Consumer, Run} from "../../components/models/CallbackTypes";
 
 type Props = {
     children: ReactElement
@@ -43,16 +42,14 @@ export default function AuthContextProvider(props: Props) {
         return {username, password}
     }, [username, password])
 
-    const login = useCallback((successCallback: Consumer<string>, finishedCallback: Run) => {
-        axios.post(apiUrl, loginData)
-            .then(response => {
-                const token = response.data
-                saveToken(token)
-                successCallback(token)
-            })
+    const login = useCallback(() => {
+        return axios.post(apiUrl, loginData)
+            .then(response => saveToken(response.data))
             .then(clearInput)
-            .catch(reason => showError(reason.response.data))
-            .finally(finishedCallback)
+            .catch(reason => {
+                showError(reason.response.data)
+                throw reason
+            })
     }, [loginData])
 
     const logout = useCallback(() => {
@@ -63,6 +60,7 @@ export default function AuthContextProvider(props: Props) {
     const providerValue: AuthContextProviderValue = useMemo(() => {
         return {
             isAuthenticated: token !== undefined && token !== "",
+            authHeader: {headers: {Authorization: "Bearer " + token}},
             loginInputValues: {username, password, setUsername, setPassword},
             login,
             logout

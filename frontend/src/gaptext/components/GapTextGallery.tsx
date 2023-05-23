@@ -1,10 +1,20 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {GapTextContext} from "../common/GapTextContext";
 import {Container, Grid} from "@mui/material";
 import GapTextCard from "./GapTextCard";
+import {AuthContext} from "../../security/common/AuthContext";
 
 export default function GapTextGallery() {
-    const {gapTextContainers} = useContext(GapTextContext)
+    const {gapTextContainers, loadAllGapTextContainers} = useContext(GapTextContext)
+    const {isAuthenticated} = useContext(AuthContext)
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            return
+        }
+
+        loadAllGapTextContainers()
+    }, [isAuthenticated, loadAllGapTextContainers])
 
     return (
         <Container sx={{py: 8}} maxWidth="lg">

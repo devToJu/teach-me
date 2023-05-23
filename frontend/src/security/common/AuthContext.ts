@@ -1,17 +1,20 @@
 import {defaultLoginInputValues, LoginInputValues} from "../models/LoginInputValues";
 import {createContext} from "react";
-import {Consumer, Run} from "../../components/models/CallbackTypes";
+import {Run} from "../../components/models/CallbackTypes";
+import {AxiosRequestConfig} from "axios";
 
 export type AuthContextProviderValue = {
-    isAuthenticated: boolean,
+    isAuthenticated: boolean
+    authHeader: AxiosRequestConfig
     loginInputValues: LoginInputValues
-    login: (successCallback: Consumer<string>, finishedCallback: Run) => void
+    login: () => Promise<any>
     logout: Run
 }
 
 export const AuthContext = createContext<AuthContextProviderValue>({
     isAuthenticated: false,
+    authHeader: {},
     loginInputValues: defaultLoginInputValues,
-    login: () => {},
+    login: () => Promise.resolve(),
     logout: () => {}
 })
