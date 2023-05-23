@@ -39,7 +39,7 @@ export default function GapTextContextProvider(props: Props) {
         axios.get(apiUrl + "/" + id, authHeader)
             .then(response => successCallback(response.data.description, response.data.gapTexts))
             .catch(reason => showError(reason.response.data))
-    }, [])
+    }, [authHeader])
 
     const saveGapTextContainer = useCallback((
         newContainerDTO: GapTextContainerDtoModel,
@@ -50,11 +50,11 @@ export default function GapTextContextProvider(props: Props) {
             .then(() => toast.success("Gap Text saved successfully!"))
             .then(successCallback)
             .catch(reason => showError(reason.response.data))
-    }, [])
+    }, [authHeader])
 
     const updateGapTextContainer = useCallback((container: GapTextContainerModel) => {
         const putUrl = apiUrl + "/" + container.id
-        axios.put(putUrl, container)
+        axios.put(putUrl, container, authHeader)
             .then(response =>
                 setGapTextContainers(prevState =>
                     prevState.map(item => {
@@ -64,15 +64,15 @@ export default function GapTextContextProvider(props: Props) {
             )
             .then(() => toast.success("Container updated successfully!"))
             .catch(reason => showError(reason.response.data))
-    }, [])
+    }, [authHeader])
 
     const deleteGapTextContainer = useCallback((id: string) => {
         const url = apiUrl + "/" + id
-        axios.delete(url)
+        axios.delete(url, authHeader)
             .then(() => setGapTextContainers(prevState =>
                 prevState.filter(container => container.id !== id)))
             .catch(reason => showError(reason.response.data))
-    }, [])
+    }, [authHeader])
 
     const providerValue: GapTextContextProviderValue = useMemo(() => {
             return {

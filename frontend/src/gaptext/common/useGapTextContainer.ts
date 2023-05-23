@@ -47,7 +47,7 @@ export function useGapTextContainer() {
 
     const updateContainer = (successCallback: () => void, errorCallback: () => void) => {
         if (id === undefined) {
-            toast.error("Could not update container: ID is undefined")
+            toast.error("Could not update gap text: ID is undefined")
             errorCallback()
             return
         }
