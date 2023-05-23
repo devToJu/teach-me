@@ -8,7 +8,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {AuthContext} from "../common/AuthContext";
-import {GapTextContext} from "../../gaptext/common/GapTextContext";
 import {useNavigate} from "react-router-dom";
 import {urlGapText} from "../../components/navigation/PageModel";
 import {useDialogInProgress} from "../../components/dialogs/useDialogInProgress";
@@ -17,18 +16,15 @@ import DialogInProgress from "../../components/dialogs/DialogInProgress";
 export default function SignIn() {
     const {isOpen, openDialog, closeDialog} = useDialogInProgress()
     const {loginInputValues, login} = useContext(AuthContext)
-    const {loadAllGapTextContainers} = useContext(GapTextContext)
     const navigate = useNavigate()
-
-    const loginSucceed = (token: string) => {
-        loadAllGapTextContainers(token)
-        navigate(urlGapText)
-    }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         openDialog()
-        login(loginSucceed, closeDialog)
+
+        login()
+            .then(() => navigate(urlGapText))
+            .finally(closeDialog)
     }
 
     return (

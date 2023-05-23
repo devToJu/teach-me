@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         var authHeader = request.getHeader("Authorization");
         var isUserIsLoggedIn = SecurityContextHolder.getContext().getAuthentication() != null;
-        var hasNoUserToLogin = authHeader == null;
+        var hasNoUserToLogin = Strings.isBlank(authHeader);
 
         if (isUserIsLoggedIn || hasNoUserToLogin) {
             filterChain.doFilter(request, response);

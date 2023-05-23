@@ -6,6 +6,7 @@ import NavigationNarrow from "./NavigationNarrow";
 import NavigationWide from "./NavigationWide";
 import LogoNarrow from "./LogoNarrow";
 import SignInButton from "../../security/components/SignInButton";
+import SignOutButton from "../../security/components/SignOutButton";
 
 
 const pages: PageModelGroup = {
@@ -25,6 +26,7 @@ export default function ResponsiveAppBar() {
                     <NavigationNarrow pages={pages}/>
                     <NavigationWide pages={pages}/>
                     <LogoNarrow/>
+                    <SignOutButton/>
                     <SignInButton/>
                 </Toolbar>
             </Container>
