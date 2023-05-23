@@ -5,11 +5,13 @@ import {GapTextContainerModel} from "../models/GapTextContainerModel";
 import {GapTextModel} from "../models/GapTextModel";
 import {useGapTexts} from "./useGapTexts";
 import {useParams} from "react-router-dom";
-import {toast} from "react-toastify";
+import {Run} from "../../components/models/CallbackTypes";
+import {useMessageHandling} from "../../components/common/useMessageHandling";
 
 export function useGapTextContainer() {
     const {loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer} = useContext(GapTextContext)
     const {gapTexts, setGapTexts, addEmptyRow, removeRow, updateRow} = useGapTexts()
+    const {showError} = useMessageHandling()
     const [description, setDescription] = useState<string>("")
     const {id} = useParams()
 
@@ -34,7 +36,7 @@ export function useGapTextContainer() {
         setDescription("")
     }
 
-    const saveContainer = (finishedCallback: () => void) => {
+    const saveContainer = (finishedCallback: Run) => {
         const containerDTO: GapTextContainerDtoModel = {
             gapTexts: gapTexts,
             description: description
@@ -44,9 +46,9 @@ export function useGapTextContainer() {
         finishedCallback()
     }
 
-    const updateContainer = (successCallback: () => void, errorCallback: () => void) => {
+    const updateContainer = (successCallback: Run, errorCallback: Run) => {
         if (id === undefined) {
-            toast.error("Could not update gap text: ID is undefined")
+            showError("Could not update gap text: ID is undefined")
             errorCallback()
             return
         }

@@ -3,7 +3,7 @@ import {ApiError} from "../models/ApiError";
 import {toast} from "react-toastify";
 
 export function useMessageHandling() {
-    const showError = (error: AxiosError) => {
+    const showAxiosError = (error: AxiosError) => {
         const apiError = error.response?.data as ApiError
         if (apiError === undefined)
             return
@@ -11,9 +11,13 @@ export function useMessageHandling() {
         toast.error(error.message)
     }
 
+    const showError = (message: string) => {
+        toast.error(message)
+    }
+
     const showSuccess = (message: string) => {
         toast.success(message)
     }
 
-    return {showError, showSuccess}
+    return {showAxiosError, showError, showSuccess}
 }
