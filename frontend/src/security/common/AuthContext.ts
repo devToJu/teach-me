@@ -7,7 +7,7 @@ export type AuthContextProviderValue = {
     isAuthenticated: boolean
     authHeader: AxiosRequestConfig
     loginInputValues: LoginInputValues
-    login: () => Promise<any>
+    login: (successCallback: Run, finishedCallback: Run) => void
     logout: Run
 }
 

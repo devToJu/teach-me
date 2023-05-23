@@ -2,6 +2,8 @@ import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
 import {AuthContext, AuthContextProviderValue} from "./AuthContext";
 import axios from "axios";
 import {LoginData} from "../models/LoginData";
+import {Run} from "../../components/models/CallbackTypes";
+import {useMessageHandling} from "../../components/common/useMessageHandling";
 
 type Props = {
     children: ReactElement
@@ -11,6 +13,7 @@ export default function AuthContextProvider({children}: Props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [token, setToken] = useState("")
+    const {showError} = useMessageHandling()
     const tokenStorageKey = "authToken"
     const apiUrl = "/api/auth/login"
 
@@ -33,11 +36,13 @@ export default function AuthContextProvider({children}: Props) {
         return {username, password}
     }, [username, password])
 
-    const login = useCallback(() => {
-        return axios.post(apiUrl, loginData)
+    const login = useCallback((successCallback: Run, finishedCallback: Run) => {
+        axios.post(apiUrl, loginData)
             .then(response => saveToken(response.data))
             .then(clearInput)
-            .catch(reason => { throw reason })
+            .then(successCallback)
+            .catch(reason => showError(reason))
+            .finally(finishedCallback)
     }, [loginData])
 
     const logout = useCallback(() => {
