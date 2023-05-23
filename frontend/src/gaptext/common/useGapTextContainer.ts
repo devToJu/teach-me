@@ -6,7 +6,6 @@ import {GapTextModel} from "../models/GapTextModel";
 import {useGapTexts} from "./useGapTexts";
 import {useParams} from "react-router-dom";
 import {toast} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export function useGapTextContainer() {
     const {loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer} = useContext(GapTextContext)

@@ -12,18 +12,27 @@ import {useNavigate} from "react-router-dom";
 import {urlGapText} from "../../components/navigation/PageModel";
 import {useDialogInProgress} from "../../components/dialogs/useDialogInProgress";
 import DialogInProgress from "../../components/dialogs/DialogInProgress";
+import {AxiosError} from "axios";
+import {toast} from "react-toastify";
 
 export default function SignIn() {
     const {isOpen, openDialog, closeDialog} = useDialogInProgress()
     const {loginInputValues, login} = useContext(AuthContext)
     const navigate = useNavigate()
 
+    const showError = (error: AxiosError) => {
+        console.log("showError")
+        toast.error(error.message)
+    }
+
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        console.log("handleSubmit")
         openDialog()
 
         login()
             .then(() => navigate(urlGapText))
+            .catch(error => showError(error))
             .finally(closeDialog)
     }
 

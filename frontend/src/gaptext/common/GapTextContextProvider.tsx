@@ -1,8 +1,7 @@
 import {ReactElement, useCallback, useContext, useMemo, useState} from "react";
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
-import {toast, ToastContainer} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {toast} from "react-toastify";
 import {GapTextContext, GapTextContextProviderValue} from "./GapTextContext"
 import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
 import {GapTextModel} from "../models/GapTextModel";
@@ -15,18 +14,14 @@ type Props = {
     children: ReactElement
 }
 
-export default function GapTextContextProvider(props: Props) {
+export default function GapTextContextProvider({children}: Props) {
     const {authHeader} = useContext(AuthContext)
     const [gapTextContainers, setGapTextContainers] = useState<GapTextContainerModel[]>([])
     const apiUrl: string = "/api/gaptextcontainer"
 
-    const showError = (data: any) => {
-        if (data.messages === undefined)
-            return
-
-        data.messages.forEach((message: string) => {
-            toast.error(message)
-        })
+    const showError = (error: AxiosError) => {
+        console.log("showError")
+        toast.error(error.message)
     }
 
     const loadAllGapTextContainers = useCallback(() => {
@@ -38,7 +33,7 @@ export default function GapTextContextProvider(props: Props) {
     const loadGapTextContainerById = useCallback((id: string, successCallback: LoadByIdSuccessCallback) => {
         axios.get(apiUrl + "/" + id, authHeader)
             .then(response => successCallback(response.data.description, response.data.gapTexts))
-            .catch(reason => showError(reason.response.data))
+            .catch(error => showError(error))
     }, [authHeader])
 
     const saveGapTextContainer = useCallback((
@@ -96,8 +91,7 @@ export default function GapTextContextProvider(props: Props) {
 
     return (
         <GapTextContext.Provider value={providerValue}>
-            {props.children}
-            <ToastContainer/>
+            {children}
         </GapTextContext.Provider>
     )
 }

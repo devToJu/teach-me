@@ -1,6 +1,4 @@
 import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {AuthContext, AuthContextProviderValue} from "./AuthContext";
 import axios from "axios";
 import {LoginData} from "../models/LoginData";
@@ -9,8 +7,7 @@ type Props = {
     children: ReactElement
 }
 
-export default function AuthContextProvider(props: Props) {
-    const {children} = props
+export default function AuthContextProvider({children}: Props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [token, setToken] = useState("")
@@ -21,12 +18,6 @@ export default function AuthContextProvider(props: Props) {
         const token = localStorage.getItem(tokenStorageKey)
         setToken(token || "")
     }, [])
-
-    const showError = (data: any) => {
-        data.messages.forEach((message: string) => {
-            toast.error(message)
-        })
-    }
 
     const clearInput = () => {
         setUsername("")
@@ -46,10 +37,7 @@ export default function AuthContextProvider(props: Props) {
         return axios.post(apiUrl, loginData)
             .then(response => saveToken(response.data))
             .then(clearInput)
-            .catch(reason => {
-                showError(reason.response.data)
-                throw reason
-            })
+            .catch(reason => { throw reason })
     }, [loginData])
 
     const logout = useCallback(() => {
@@ -70,7 +58,6 @@ export default function AuthContextProvider(props: Props) {
     return (
         <AuthContext.Provider value={providerValue}>
             {children}
-            <ToastContainer/>
         </AuthContext.Provider>
     )
 }
