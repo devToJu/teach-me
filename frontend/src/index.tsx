@@ -4,15 +4,18 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GapTextContextProvider from "./gaptext/common/GapTextContextProvider";
+import AuthContextProvider from "./security/common/AuthContextProvider";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
-        <GapTextContextProvider>
-            <App/>
-        </GapTextContextProvider>
+        <AuthContextProvider>
+            <GapTextContextProvider>
+                <App/>
+            </GapTextContextProvider>
+        </AuthContextProvider>
     </React.StrictMode>
 );
 

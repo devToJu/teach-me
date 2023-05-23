@@ -3,5 +3,11 @@ export type PageModel = {
     name: string
 }
 
+export type PageModelGroup = {
+    name: string,
+    subitems: PageModel[]
+}
+
 export const urlGapText : string = "/gaptext"
 export const urlGapTextCreate: string = "/gaptext/create"
+export const urlLogin: string = "/signin"

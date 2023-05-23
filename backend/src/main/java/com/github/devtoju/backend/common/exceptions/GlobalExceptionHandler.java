@@ -1,7 +1,8 @@
 package com.github.devtoju.backend.common.exceptions;
 
-import com.github.devtoju.backend.gaptext.exceptions.GapTextContainerIdIsNotValidException;
-import com.github.devtoju.backend.gaptext.exceptions.GapTextContainerNotExistException;
+import com.github.devtoju.backend.gaptext.exceptions.*;
+import com.github.devtoju.backend.security.common.UserInDbAuthException;
+import com.github.devtoju.backend.security.jwt.JwtAuthSecurityException;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +37,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         var messages = createValidationErrorMessages(e);
         return createResponseEntity(messages, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JwtAuthSecurityException.class)
+    public ResponseEntity<ApiError> handleJwtAuthSecurityException(JwtAuthSecurityException e) {
+        var messages = List.of(e.getMessage());
+        return createResponseEntity(messages, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(UserInDbAuthException.class)
+    public ResponseEntity<ApiError> handleUserInDbAuthException(UserInDbAuthException e) {
+        var messages = List.of(e.getMessage());
+        return createResponseEntity(messages, e.getHttpStatus());
     }
 
     private ResponseEntity<ApiError> createResponseEntity(List<String> messages, HttpStatus status) {

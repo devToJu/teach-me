@@ -1,4 +1,4 @@
-import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
+import {ReactElement, useCallback, useMemo, useState} from "react";
 import axios from "axios";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
 import {toast, ToastContainer} from "react-toastify";
@@ -17,27 +17,25 @@ export default function GapTextContextProvider(props: Props) {
     const [gapTextContainers, setGapTextContainers] = useState<GapTextContainerModel[]>([])
     const apiUrl: string = "/api/gaptextcontainer"
 
-    const showError = (reason: any) => {
-        if (reason.type === undefined)
+    const showError = (data: any) => {
+        if (data.messages === undefined)
             return
 
-        const msg = `ERROR ${reason.response.status}:   
-                ${reason.response.statusText} \n
-                ${reason.request.responseURL}`
-
-        toast.error(msg)
+        data.messages.forEach((message: string) => {
+            toast.error(message)
+        })
     }
 
-    const loadAllGapTextContainers = useCallback(() => {
-        axios.get(apiUrl)
+    const loadAllGapTextContainers = useCallback((token: string) => {
+        axios.get(apiUrl, {headers: {Authorization: "Bearer " + token}})
             .then(response => setGapTextContainers(response.data))
-            .catch(reason => showError(reason))
+            .catch(reason => showError(reason.response.data))
     }, [])
 
     const loadGapTextContainerById = useCallback((id: string, successCallback: LoadByIdSuccessCallback) => {
         axios.get(apiUrl + "/" + id)
             .then(response => successCallback(response.data.description, response.data.gapTexts))
-            .catch(reason => showError(reason))
+            .catch(reason => showError(reason.response.data))
     }, [])
 
     const saveGapTextContainer = useCallback((
@@ -47,7 +45,7 @@ export default function GapTextContextProvider(props: Props) {
             .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
             .then(() => toast.success("Container saved successfully!"))
             .then(() => successCallback())
-            .catch(reason => showError(reason))
+            .catch(reason => showError(reason.response.data))
     }, [])
 
     const updateGapTextContainer = useCallback((container: GapTextContainerModel) => {
@@ -61,7 +59,7 @@ export default function GapTextContextProvider(props: Props) {
                 )
             )
             .then(() => toast.success("Container updated successfully!"))
-            .catch(reason => showError(reason))
+            .catch(reason => showError(reason.response.data))
     }, [])
 
     const deleteGapTextContainer = useCallback((id: string) => {
@@ -69,23 +67,28 @@ export default function GapTextContextProvider(props: Props) {
         axios.delete(url)
             .then(() => setGapTextContainers(prevState =>
                 prevState.filter(container => container.id !== id)))
-            .catch(reason => showError(reason))
+            .catch(reason => showError(reason.response.data))
     }, [])
 
-    useEffect(
-        () => loadAllGapTextContainers(),
-        [loadAllGapTextContainers]
-    )
-
     const providerValue: GapTextContextProviderValue = useMemo(() => {
-        return {
-            gapTextContainers: gapTextContainers,
-            loadGapTextContainerById: loadGapTextContainerById,
-            saveGapTextContainer: saveGapTextContainer,
-            updateGapTextContainer: updateGapTextContainer,
-            deleteGapTextContainer: deleteGapTextContainer
-        }
-    }, [gapTextContainers, loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer])
+            return {
+                gapTextContainers,
+                loadAllGapTextContainers,
+                loadGapTextContainerById,
+                saveGapTextContainer,
+                updateGapTextContainer,
+                deleteGapTextContainer
+            }
+        },
+        [
+            gapTextContainers,
+            loadAllGapTextContainers,
+            loadGapTextContainerById,
+            saveGapTextContainer,
+            updateGapTextContainer,
+            deleteGapTextContainer
+        ]
+    )
 
     return (
         <GapTextContext.Provider value={providerValue}>
