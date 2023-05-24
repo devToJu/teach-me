@@ -303,7 +303,7 @@ class GapTextContainerIntegrationTest {
     }
 
     @Test
-    void deleteContainer_shouldReturnStatus403_whenIdExist() throws Exception {
+    void deleteContainer_shouldReturnStatus403_whenNotLoggedIn() throws Exception {
         mockMvc.perform(delete(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(GapTextFactory.id))

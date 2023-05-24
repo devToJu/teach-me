@@ -59,15 +59,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, status);
     }
 
-    private HttpStatus mapUserInDbExceptionToHttpStatus(RuntimeException e) {
+    private HttpStatus mapUserInDbExceptionToHttpStatus(UserInDbAuthException e) {
         Map<Class<? extends RuntimeException>, HttpStatus> httpStatusMapping = Map.of(
                 DisabledException.class, HttpStatus.UNAUTHORIZED,
                 LockedException.class, HttpStatus.LOCKED,
-                BadCredentialsException.class, HttpStatus.UNPROCESSABLE_ENTITY
+                BadCredentialsException.class, HttpStatus.UNAUTHORIZED
         );
 
-        return httpStatusMapping.get(e.getClass());
-
+        var causeClass = e.getCause().getClass();
+        return httpStatusMapping.getOrDefault(causeClass, HttpStatus.BAD_REQUEST);
     }
 
     private List<String> createValidationErrorMessages(MethodArgumentNotValidException e) {

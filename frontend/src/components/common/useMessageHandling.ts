@@ -8,7 +8,9 @@ export function useMessageHandling() {
         if (apiError === undefined)
             return
 
-        toast.error(error.message)
+        let message: string = ""
+        apiError.messages.forEach(msg => message += msg + '\n')
+        toast.error(message)
     }
 
     const showError = (message: string) => {
