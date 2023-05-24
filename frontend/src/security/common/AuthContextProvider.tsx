@@ -13,7 +13,7 @@ export default function AuthContextProvider({children}: Props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [token, setToken] = useState("")
-    const {showError} = useMessageHandling()
+    const {showAxiosError} = useMessageHandling()
     const tokenStorageKey = "authToken"
     const apiUrl = "/api/auth/login"
 
@@ -41,9 +41,9 @@ export default function AuthContextProvider({children}: Props) {
             .then(response => saveToken(response.data))
             .then(clearInput)
             .then(successCallback)
-            .catch(reason => showError(reason))
+            .catch(reason => showAxiosError(reason))
             .finally(finishedCallback)
-    }, [loginData, showError])
+    }, [loginData, showAxiosError])
 
     const logout = useCallback(() => {
         localStorage.removeItem(tokenStorageKey)

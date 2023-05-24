@@ -37,8 +37,8 @@ export default function GapTextCreateOrUpdate() {
     }
 
     const onUpdateFinished = () => {
-        closeDialog()
         navigate(urlGapText)
+        closeDialog()
     }
 
     const gapTextCreateOrUpdateContainerProps: GapTextCreateOrUpdateContainerProps = {
