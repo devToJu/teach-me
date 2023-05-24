@@ -4,12 +4,14 @@ import com.github.devtoju.backend.gaptext.exceptions.*;
 import com.github.devtoju.backend.security.common.UserInDbAuthException;
 import com.github.devtoju.backend.security.jwt.JwtAuthSecurityException;
 import org.springframework.http.*;
+import org.springframework.security.authentication.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -48,12 +50,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserInDbAuthException.class)
     public ResponseEntity<ApiError> handleUserInDbAuthException(UserInDbAuthException e) {
         var messages = List.of(e.getMessage());
-        return createResponseEntity(messages, e.getHttpStatus());
+        var status = mapUserInDbExceptionToHttpStatus(e);
+        return createResponseEntity(messages, status);
     }
 
     private ResponseEntity<ApiError> createResponseEntity(List<String> messages, HttpStatus status) {
         var apiError = ApiError.of(messages);
         return new ResponseEntity<>(apiError, status);
+    }
+
+    private HttpStatus mapUserInDbExceptionToHttpStatus(UserInDbAuthException e) {
+        Map<Class<? extends RuntimeException>, HttpStatus> httpStatusMapping = Map.of(
+                DisabledException.class, HttpStatus.UNAUTHORIZED,
+                LockedException.class, HttpStatus.LOCKED,
+                BadCredentialsException.class, HttpStatus.UNAUTHORIZED
+        );
+
+        var causeClass = e.getCause().getClass();
+        return httpStatusMapping.getOrDefault(causeClass, HttpStatus.BAD_REQUEST);
     }
 
     private List<String> createValidationErrorMessages(MethodArgumentNotValidException e) {

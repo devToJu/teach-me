@@ -1,19 +1,19 @@
 import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {AuthContext, AuthContextProviderValue} from "./AuthContext";
 import axios from "axios";
 import {LoginData} from "../models/LoginData";
+import {Run} from "../../components/models/CallbackTypes";
+import {useMessageHandling} from "../../components/common/useMessageHandling";
 
 type Props = {
     children: ReactElement
 }
 
-export default function AuthContextProvider(props: Props) {
-    const {children} = props
+export default function AuthContextProvider({children}: Props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [token, setToken] = useState("")
+    const {showAxiosError} = useMessageHandling()
     const tokenStorageKey = "authToken"
     const apiUrl = "/api/auth/login"
 
@@ -21,12 +21,6 @@ export default function AuthContextProvider(props: Props) {
         const token = localStorage.getItem(tokenStorageKey)
         setToken(token || "")
     }, [])
-
-    const showError = (data: any) => {
-        data.messages.forEach((message: string) => {
-            toast.error(message)
-        })
-    }
 
     const clearInput = () => {
         setUsername("")
@@ -42,15 +36,14 @@ export default function AuthContextProvider(props: Props) {
         return {username, password}
     }, [username, password])
 
-    const login = useCallback(() => {
-        return axios.post(apiUrl, loginData)
+    const login = useCallback((successCallback: Run, finishedCallback: Run) => {
+        axios.post(apiUrl, loginData)
             .then(response => saveToken(response.data))
             .then(clearInput)
-            .catch(reason => {
-                showError(reason.response.data)
-                throw reason
-            })
-    }, [loginData])
+            .then(successCallback)
+            .catch(reason => showAxiosError(reason))
+            .finally(finishedCallback)
+    }, [loginData, showAxiosError])
 
     const logout = useCallback(() => {
         localStorage.removeItem(tokenStorageKey)
@@ -70,7 +63,6 @@ export default function AuthContextProvider(props: Props) {
     return (
         <AuthContext.Provider value={providerValue}>
             {children}
-            <ToastContainer/>
         </AuthContext.Provider>
     )
 }

@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,18 +33,19 @@ class SecurityIntegrationTest {
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(loginDataAsJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(blankOrNullString())));
     }
 
     @Test
-    void login_shouldReturnApiErrorAndStatus422_WhenUserNotExist() throws Exception {
+    void login_shouldReturnApiErrorAndStatus401_WhenCredentialsAreWrong() throws Exception {
         var loginDataAsJson = SecurityFactory.ofLoginDataAsJson();
         var expectedMessage = SecurityFactory.errorBadCredentials;
 
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(loginDataAsJson))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.messages").value(expectedMessage));
     }
 }

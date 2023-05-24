@@ -22,9 +22,7 @@ export default function SignIn() {
         event.preventDefault()
         openDialog()
 
-        login()
-            .then(() => navigate(urlGapText))
-            .finally(closeDialog)
+        login(() => navigate(urlGapText), closeDialog)
     }
 
     return (

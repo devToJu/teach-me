@@ -5,12 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GapTextContextProvider from "./gaptext/common/GapTextContextProvider";
 import AuthContextProvider from "./security/common/AuthContextProvider";
+import {ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
+        <ToastContainer/>
         <AuthContextProvider>
             <GapTextContextProvider>
                 <App/>
