@@ -43,7 +43,7 @@ export default function AuthContextProvider({children}: Props) {
             .then(successCallback)
             .catch(reason => showError(reason))
             .finally(finishedCallback)
-    }, [loginData])
+    }, [loginData, showError])
 
     const logout = useCallback(() => {
         localStorage.removeItem(tokenStorageKey)

@@ -25,14 +25,14 @@ export default function GapTextContextProvider({children}: Props) {
         axios.get(apiUrl, authHeader)
             .then(response => setGapTextContainers(response.data))
             .catch(reason => showAxiosError(reason))
-    }, [authHeader])
+    }, [authHeader, showAxiosError])
 
     const loadGapTextContainerById = useCallback((id: string, successCallback: LoadByIdSuccessCallback) => {
         axios.get(apiUrl + "/" + id, authHeader)
             .then(response => response.data)
             .then(data => successCallback(data.description, data.gapTexts))
             .catch(error => showAxiosError(error))
-    }, [authHeader])
+    }, [authHeader, showAxiosError])
 
     const saveGapTextContainer = useCallback((
         newContainerDTO: GapTextContainerDtoModel,
@@ -43,7 +43,7 @@ export default function GapTextContextProvider({children}: Props) {
             .then(() => showSuccess("Gap Text saved successfully!"))
             .then(successCallback)
             .catch(reason => showAxiosError(reason))
-    }, [authHeader])
+    }, [authHeader, showAxiosError, showSuccess])
 
     const updateGapTextContainer = useCallback((container: GapTextContainerModel) => {
         const putUrl = apiUrl + "/" + container.id
@@ -57,7 +57,7 @@ export default function GapTextContextProvider({children}: Props) {
             )
             .then(() => showSuccess("Gap Text updated successfully!"))
             .catch(reason => showAxiosError(reason))
-    }, [authHeader])
+    }, [authHeader, showAxiosError, showSuccess])
 
     const deleteGapTextContainer = useCallback((id: string) => {
         const url = apiUrl + "/" + id
@@ -65,7 +65,7 @@ export default function GapTextContextProvider({children}: Props) {
             .then(() => setGapTextContainers(prevState =>
                 prevState.filter(container => container.id !== id)))
             .catch(reason => showAxiosError(reason))
-    }, [authHeader])
+    }, [authHeader, showAxiosError])
 
     const providerValue: GapTextContextProviderValue = useMemo(() => {
             return {
