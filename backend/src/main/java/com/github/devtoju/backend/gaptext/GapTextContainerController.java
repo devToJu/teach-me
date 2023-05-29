@@ -16,8 +16,8 @@ public class GapTextContainerController {
     private final GapTextContainerService gapTextContainerService;
 
     @GetMapping
-    public List<GapTextContainer> getAllContainers() {
-        return gapTextContainerService.getAllContainers();
+    public List<GapTextContainer> getAllContainers(@RequestBody String creator) {
+        return gapTextContainerService.getAllContainers(creator);
     }
 
     @GetMapping("/{id}")

@@ -10,6 +10,8 @@ public record GapTextContainerCreateDTO(
         @Size(max = 255)
         String description,
         @Size(min = 2, max = 6)
-        List<GapText> gapTexts
+        List<GapText> gapTexts,
+        @NotBlank
+        String creator
 ) {
 }

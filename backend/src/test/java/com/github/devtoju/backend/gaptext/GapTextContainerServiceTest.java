@@ -36,7 +36,9 @@ class GapTextContainerServiceTest {
         when(gapTextContainerRepo.findAll())
                 .thenReturn(Collections.emptyList());
 
-        List<GapTextContainer> actual = gapTextContainerService.getAllContainers();
+        List<GapTextContainer> actual = gapTextContainerService
+                .getAllContainers(GapTextFactory.creator);
+
         verify(gapTextContainerRepo).findAll();
 
         List<GapTextContainer> expected = Collections.emptyList();

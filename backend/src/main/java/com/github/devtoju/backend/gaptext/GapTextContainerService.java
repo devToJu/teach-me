@@ -6,6 +6,7 @@ import com.github.devtoju.backend.gaptext.models.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -15,8 +16,10 @@ public class GapTextContainerService {
     private final CreateDtoToGapTextContainerMapper createDtoToGapTextContainerMapper;
     private final UpdateDtoToGapTextContainerMapper updateDtoToGapTextContainerMapper;
 
-    public List<GapTextContainer> getAllContainers() {
-        return gapTextContainerRepo.findAll();
+    public List<GapTextContainer> getAllContainers(String creator) {
+        return gapTextContainerRepo
+                .getGapTextContainersByCreator(creator)
+                .orElse(Collections.emptyList());
     }
 
     public GapTextContainer getContainerById(String id) {
