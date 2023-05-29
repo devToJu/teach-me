@@ -27,7 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class GapTextContainerIntegrationTest {
 
-    private final String apiUrl = "/api/gaptextcontainer";
+    private final String apiUrl = "/api/gaptext";
+    private final String apiUrlAll = apiUrl + "/all";
 
     @Autowired
     MockMvc mockMvc;
@@ -55,8 +56,8 @@ class GapTextContainerIntegrationTest {
         var creator = userToAdd.username();
         repo.save(userToAdd);
 
-        mockMvc.perform(get(apiUrl)
-                        .content(creator))
+        var url = apiUrlAll + "/" + creator;
+        mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(content().json(emptyListAsJson));
     }
@@ -80,8 +81,8 @@ class GapTextContainerIntegrationTest {
         var expectedCreator = userToAdd.username();
         assertEquals(expectedCreator, actualCreator);
 
-        mockMvc.perform(get(apiUrl)
-                        .content(actualCreator)
+        var url = apiUrlAll + "/" + actualCreator;
+        mockMvc.perform(get(url)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

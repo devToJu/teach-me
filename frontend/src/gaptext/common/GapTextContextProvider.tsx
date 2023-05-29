@@ -19,10 +19,11 @@ export default function GapTextContextProvider({children}: Props) {
     const {showAxiosError, showSuccess} = useMessageHandling()
 
     const [gapTextContainers, setGapTextContainers] = useState<GapTextContainerModel[]>([])
-    const apiUrl: string = "/api/gaptextcontainer"
+    const apiUrl: string = "/api/gaptext"
 
     const loadAllGapTextContainers = useCallback(() => {
-        axios.get(apiUrl, authHeader)
+        const url = apiUrl + "/all/tom"
+        axios.get(url, authHeader)
             .then(response => setGapTextContainers(response.data))
             .catch(reason => showAxiosError(reason))
     }, [authHeader, showAxiosError])

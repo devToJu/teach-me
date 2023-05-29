@@ -40,15 +40,19 @@ export default function AuthContextProvider({children}: Props) {
         setToken("")
     }, [])
 
+    const authHeader = useMemo(() => {
+        return {headers: {Authorization: "Bearer " + token}}
+    }, [token])
+
     const providerValue: AuthContextProviderValue = useMemo(() => {
         return {
             isAuthenticated: token !== undefined && token !== "",
-            authHeader: {headers: {Authorization: "Bearer " + token}},
+            authHeader,
             loginInputValues,
             login,
             logout
         }
-    }, [token, loginInputValues, login, logout])
+    }, [token, authHeader, loginInputValues, login, logout])
 
     return (
         <AuthContext.Provider value={providerValue}>
