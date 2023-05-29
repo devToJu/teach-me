@@ -4,6 +4,7 @@ import com.github.devtoju.backend.gaptext.components.CreateDtoToGapTextContainer
 import com.github.devtoju.backend.gaptext.components.UpdateDtoToGapTextContainerMapper;
 import com.github.devtoju.backend.gaptext.exceptions.GapTextContainerNotExistException;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
+import com.github.devtoju.backend.security.UserInDbRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.*;
 class GapTextContainerServiceTest {
     GapTextContainerService gapTextContainerService;
     private final GapTextContainerRepo gapTextContainerRepo = mock(GapTextContainerRepo.class);
+    private final UserInDbRepo userInDbRepo = mock(UserInDbRepo.class);
     private final CreateDtoToGapTextContainerMapper createDtoToGapTextContainerMapper =
             mock(CreateDtoToGapTextContainerMapper.class);
     private final UpdateDtoToGapTextContainerMapper updateDtoToGapTextContainerMapper =
@@ -26,6 +28,7 @@ class GapTextContainerServiceTest {
     void init() {
         gapTextContainerService = new GapTextContainerService(
                 gapTextContainerRepo,
+                userInDbRepo,
                 createDtoToGapTextContainerMapper,
                 updateDtoToGapTextContainerMapper
         );

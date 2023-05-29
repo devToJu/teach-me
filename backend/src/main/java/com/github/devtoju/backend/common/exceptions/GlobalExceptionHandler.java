@@ -35,6 +35,14 @@ public class GlobalExceptionHandler {
         return createResponseEntity(messages, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    @ExceptionHandler(GapTextContainerCreatorNotExistException.class)
+    public ResponseEntity<ApiError> handleGapTextContainerCreatorNotExistException(
+            GapTextContainerCreatorNotExistException e
+    ) {
+        var messages = List.of(e.getMessage());
+        return createResponseEntity(messages, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         var messages = createValidationErrorMessages(e);
