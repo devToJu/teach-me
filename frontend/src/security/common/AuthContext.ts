@@ -4,6 +4,7 @@ import {Run} from "../../components/models/CallbackTypes";
 import {AxiosRequestConfig} from "axios";
 
 export type AuthContextProviderValue = {
+    username: string,
     isAuthenticated: boolean
     authHeader: AxiosRequestConfig
     loginInputValues: LoginInputValues
@@ -12,6 +13,7 @@ export type AuthContextProviderValue = {
 }
 
 export const AuthContext = createContext<AuthContextProviderValue>({
+    username: "",
     isAuthenticated: false,
     authHeader: {},
     loginInputValues: defaultLoginInputValues,

@@ -4,6 +4,8 @@ import axios from "axios";
 import {Run} from "../../components/models/CallbackTypes";
 import {useMessageHandling} from "../../components/common/useMessageHandling";
 import {useLoginInput} from "./useLoginInput";
+import {stringIsBlank} from "../../components/common/StringUtils";
+import {extractUsername} from "./JwtService";
 
 type Props = {
     children: ReactElement
@@ -11,6 +13,7 @@ type Props = {
 
 export default function AuthContextProvider({children}: Props) {
     const [token, setToken] = useState("")
+    const [username, setUsername] = useState("")
     const {showAxiosError} = useMessageHandling()
     const {loginInputValues, loginData, clearInput} = useLoginInput()
     const tokenStorageKey = "authToken"
@@ -20,6 +23,17 @@ export default function AuthContextProvider({children}: Props) {
         const token = localStorage.getItem(tokenStorageKey)
         setToken(token || "")
     }, [])
+
+    useEffect(() => {
+        if (stringIsBlank(token)) {
+            setUsername("")
+            return
+        }
+
+        const sub = extractUsername(token) || ""
+        setUsername(sub);
+
+    }, [token])
 
     const saveToken = (token: string) => {
         localStorage.setItem(tokenStorageKey, token)
@@ -46,13 +60,14 @@ export default function AuthContextProvider({children}: Props) {
 
     const providerValue: AuthContextProviderValue = useMemo(() => {
         return {
+            username,
             isAuthenticated: token !== undefined && token !== "",
             authHeader,
             loginInputValues,
             login,
             logout
         }
-    }, [token, authHeader, loginInputValues, login, logout])
+    }, [token, username, authHeader, loginInputValues, login, logout])
 
     return (
         <AuthContext.Provider value={providerValue}>
