@@ -1,19 +1,18 @@
 import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
 import {AuthContext, AuthContextProviderValue} from "./AuthContext";
 import axios from "axios";
-import {LoginData} from "../models/LoginData";
 import {Run} from "../../components/models/CallbackTypes";
 import {useMessageHandling} from "../../components/common/useMessageHandling";
+import {useLoginInput} from "./useLoginInput";
 
 type Props = {
     children: ReactElement
 }
 
 export default function AuthContextProvider({children}: Props) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
     const [token, setToken] = useState("")
     const {showAxiosError} = useMessageHandling()
+    const {loginInputValues, loginData, clearInput} = useLoginInput()
     const tokenStorageKey = "authToken"
     const apiUrl = "/api/auth/login"
 
@@ -22,19 +21,10 @@ export default function AuthContextProvider({children}: Props) {
         setToken(token || "")
     }, [])
 
-    const clearInput = () => {
-        setUsername("")
-        setPassword("")
-    }
-
     const saveToken = (token: string) => {
         localStorage.setItem(tokenStorageKey, token)
         setToken(token)
     }
-
-    const loginData: LoginData = useMemo(() => {
-        return {username, password}
-    }, [username, password])
 
     const login = useCallback((successCallback: Run, finishedCallback: Run) => {
         axios.post(apiUrl, loginData)
@@ -43,7 +33,7 @@ export default function AuthContextProvider({children}: Props) {
             .then(successCallback)
             .catch(reason => showAxiosError(reason))
             .finally(finishedCallback)
-    }, [loginData, showAxiosError])
+    }, [loginData, showAxiosError, clearInput])
 
     const logout = useCallback(() => {
         localStorage.removeItem(tokenStorageKey)
@@ -54,11 +44,11 @@ export default function AuthContextProvider({children}: Props) {
         return {
             isAuthenticated: token !== undefined && token !== "",
             authHeader: {headers: {Authorization: "Bearer " + token}},
-            loginInputValues: {username, password, setUsername, setPassword},
+            loginInputValues,
             login,
             logout
         }
-    }, [username, password, token, login, logout])
+    }, [token, loginInputValues, login, logout])
 
     return (
         <AuthContext.Provider value={providerValue}>

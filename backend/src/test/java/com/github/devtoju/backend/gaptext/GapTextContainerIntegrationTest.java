@@ -52,10 +52,11 @@ class GapTextContainerIntegrationTest {
     void getAllContainers_shouldReturnEmptyList_whenRepoIsEmpty() throws Exception {
         var emptyListAsJson = mapper.writeValueAsString(Collections.<GapTextContainer>emptyList());
         var userToAdd = SecurityFactory.ofUserInDb();
+        var creator = userToAdd.username();
         repo.save(userToAdd);
 
         mockMvc.perform(get(apiUrl)
-                        .content(userToAdd.username()))
+                        .content(creator))
                 .andExpect(status().isOk())
                 .andExpect(content().json(emptyListAsJson));
     }
@@ -75,12 +76,12 @@ class GapTextContainerIntegrationTest {
                 .getContentAsString();
 
         var claims = jwtService.validateToken(token);
-        var actualUsername = claims.getSubject();
-        var expectedUsername = userToAdd.username();
-        assertEquals(expectedUsername, actualUsername);
+        var actualCreator = claims.getSubject();
+        var expectedCreator = userToAdd.username();
+        assertEquals(expectedCreator, actualCreator);
 
         mockMvc.perform(get(apiUrl)
-                        .content(actualUsername)
+                        .content(actualCreator)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
