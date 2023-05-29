@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
 import java.util.Collections;
+import java.util.Optional;
 
 public class SecurityFactory {
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -26,6 +27,11 @@ public class SecurityFactory {
     public static UserInDb ofUserInDb() {
         var pwHash = encoder.encode(SecurityFactory.pw);
         return new UserInDb("id", username, pwHash);
+    }
+
+    public static Optional<UserInDb> ofUserInDbAsOptional() {
+        var userInDb = ofUserInDb();
+        return Optional.of(userInDb);
     }
 
     static User ofUser() {

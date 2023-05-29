@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
 import com.github.devtoju.backend.security.SecurityFactory;
 import com.github.devtoju.backend.security.UserInDbRepo;
+import com.github.devtoju.backend.security.jwt.JwtService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ class GapTextContainerIntegrationTest {
     @Autowired
     UserInDbRepo repo;
 
+    @Autowired
+    JwtService jwtService;
+
     @Test
     void getAllContainers_shouldReturnStatus403_whenNotLoggedIn() throws Exception {
         mockMvc.perform(get(apiUrl))
@@ -46,22 +50,14 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser()
     void getAllContainers_shouldReturnEmptyList_whenRepoIsEmpty() throws Exception {
-        String emptyListAsJson = mapper.writeValueAsString(Collections.<GapTextContainer>emptyList());
+        var emptyListAsJson = mapper.writeValueAsString(Collections.<GapTextContainer>emptyList());
+        var userToAdd = SecurityFactory.ofUserInDb();
+        repo.save(userToAdd);
 
-        mockMvc.perform(get(apiUrl))
+        mockMvc.perform(get(apiUrl)
+                        .content(userToAdd.username()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(emptyListAsJson));
-    }
-
-    @Test
-    void addContainer_shouldReturn403_whenNotLoggedIn() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
-
-        mockMvc.perform(post(apiUrl)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newCreateDtoAsJson))
-                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -78,11 +74,28 @@ class GapTextContainerIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
+        var claims = jwtService.validateToken(token);
+        var actualUsername = claims.getSubject();
+        var expectedUsername = userToAdd.username();
+        assertEquals(expectedUsername, actualUsername);
+
         mockMvc.perform(get(apiUrl)
+                        .content(actualUsername)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void addContainer_shouldReturn403_whenNotLoggedIn() throws Exception {
+        var newCreateDTO = GapTextFactory.ofCreateDTO();
+        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+
+        mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newCreateDtoAsJson))
+                .andExpect(status().isForbidden());
     }
 
     @Test

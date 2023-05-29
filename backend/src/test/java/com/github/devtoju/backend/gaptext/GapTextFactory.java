@@ -156,6 +156,15 @@ public class GapTextFactory {
         };
     }
 
+    /**
+     * Creates an error message when the gap text creator does not exist
+     *
+     * @return error message
+     */
+    public static String getErrorMessageContainerCreatorNotExist() {
+        return "Could not get gap texts containers: Creator '" + creator + "' does not exist!";
+    }
+
     private static List<GapText> createTexts() {
         var textA = createText("He was", 1);
         var textB = createGap("cleaning", 2);
