@@ -1,14 +1,14 @@
 package com.github.devtoju.backend.gaptext;
 
-import com.github.devtoju.backend.gaptext.components.CreateDtoToGapTextContainerMapper;
-import com.github.devtoju.backend.gaptext.components.UpdateDtoToGapTextContainerMapper;
-import com.github.devtoju.backend.gaptext.exceptions.GapTextContainerNotExistException;
+import com.github.devtoju.backend.gaptext.components.*;
+import com.github.devtoju.backend.gaptext.exceptions.*;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
+import com.github.devtoju.backend.security.SecurityFactory;
+import com.github.devtoju.backend.security.UserInDbRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +17,7 @@ import static org.mockito.Mockito.*;
 class GapTextContainerServiceTest {
     GapTextContainerService gapTextContainerService;
     private final GapTextContainerRepo gapTextContainerRepo = mock(GapTextContainerRepo.class);
+    private final UserInDbRepo userInDbRepo = mock(UserInDbRepo.class);
     private final CreateDtoToGapTextContainerMapper createDtoToGapTextContainerMapper =
             mock(CreateDtoToGapTextContainerMapper.class);
     private final UpdateDtoToGapTextContainerMapper updateDtoToGapTextContainerMapper =
@@ -26,21 +27,49 @@ class GapTextContainerServiceTest {
     void init() {
         gapTextContainerService = new GapTextContainerService(
                 gapTextContainerRepo,
+                userInDbRepo,
                 createDtoToGapTextContainerMapper,
                 updateDtoToGapTextContainerMapper
         );
     }
 
     @Test
-    void getAllTexts_shouldReturnEmptyList_whenRepoIsEmpty() {
-        when(gapTextContainerRepo.findAll())
-                .thenReturn(Collections.emptyList());
+    void getAllContainers_shouldReturnApiErrorAndStatus404_whenCreatorIsNotInDb() {
+        var creator = GapTextFactory.creator;
 
-        List<GapTextContainer> actual = gapTextContainerService.getAllContainers();
-        verify(gapTextContainerRepo).findAll();
+        when(userInDbRepo.getUserInDbByUsername(creator))
+                .thenReturn(Optional.empty());
 
-        List<GapTextContainer> expected = Collections.emptyList();
-        assertEquals(expected, actual);
+        var exception = assertThrows(
+                GapTextContainerCreatorNotExistException.class,
+                () -> gapTextContainerService.getAllContainers(creator)
+        );
+
+        verify(userInDbRepo).getUserInDbByUsername(creator);
+
+        var actualErrorMsg = exception.getMessage();
+        var expectedErrorMsg = GapTextFactory.getErrorMessageContainerCreatorNotExist();
+        assertEquals(expectedErrorMsg, actualErrorMsg);
+    }
+
+
+    @Test
+    void getAllContainers_shouldReturnEmptyList_whenRepoIsEmpty() {
+        var creator = GapTextFactory.creator;
+        var dbUserAsOptional = SecurityFactory.ofUserInDbAsOptional();
+
+        when(userInDbRepo.getUserInDbByUsername(creator))
+                .thenReturn(dbUserAsOptional);
+        when(gapTextContainerRepo.getGapTextContainersByCreator(creator))
+                .thenReturn(Optional.of(Collections.emptyList()));
+
+        var actualContainers = gapTextContainerService.getAllContainers(creator);
+
+        verify(userInDbRepo).getUserInDbByUsername(creator);
+        verify(gapTextContainerRepo).getGapTextContainersByCreator(creator);
+        
+        var expectedContainers = Collections.emptyList();
+        assertEquals(expectedContainers, actualContainers);
     }
 
     @Test

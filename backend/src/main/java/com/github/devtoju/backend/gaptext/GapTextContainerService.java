@@ -3,20 +3,33 @@ package com.github.devtoju.backend.gaptext;
 import com.github.devtoju.backend.gaptext.components.*;
 import com.github.devtoju.backend.gaptext.exceptions.*;
 import com.github.devtoju.backend.gaptext.models.*;
+import com.github.devtoju.backend.security.UserInDbRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class GapTextContainerService {
     private final GapTextContainerRepo gapTextContainerRepo;
+    private final UserInDbRepo userInDbRepo;
     private final CreateDtoToGapTextContainerMapper createDtoToGapTextContainerMapper;
     private final UpdateDtoToGapTextContainerMapper updateDtoToGapTextContainerMapper;
 
-    public List<GapTextContainer> getAllContainers() {
-        return gapTextContainerRepo.findAll();
+    public List<GapTextContainer> getAllContainers(String creator) {
+        var creatorNotExist = userInDbRepo
+                .getUserInDbByUsername(creator)
+                .isEmpty();
+
+        if (creatorNotExist) {
+            throw new GapTextContainerCreatorNotExistException(creator);
+        }
+
+        return gapTextContainerRepo
+                .getGapTextContainersByCreator(creator)
+                .orElse(Collections.emptyList());
     }
 
     public GapTextContainer getContainerById(String id) {

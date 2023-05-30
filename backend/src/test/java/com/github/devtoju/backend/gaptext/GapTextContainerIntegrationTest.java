@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.devtoju.backend.gaptext.models.GapTextContainer;
 import com.github.devtoju.backend.security.SecurityFactory;
 import com.github.devtoju.backend.security.UserInDbRepo;
+import com.github.devtoju.backend.security.jwt.JwtService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class GapTextContainerIntegrationTest {
 
-    private final String apiUrl = "/api/gaptextcontainer";
+    private final String apiUrl = "/api/gaptext";
+    private final String apiUrlAll = apiUrl + "/all";
 
     @Autowired
     MockMvc mockMvc;
@@ -37,6 +39,9 @@ class GapTextContainerIntegrationTest {
     @Autowired
     UserInDbRepo repo;
 
+    @Autowired
+    JwtService jwtService;
+
     @Test
     void getAllContainers_shouldReturnStatus403_whenNotLoggedIn() throws Exception {
         mockMvc.perform(get(apiUrl))
@@ -44,24 +49,31 @@ class GapTextContainerIntegrationTest {
     }
 
     @Test
-    @WithMockUser()
-    void getAllContainers_shouldReturnEmptyList_whenRepoIsEmpty() throws Exception {
-        String emptyListAsJson = mapper.writeValueAsString(Collections.<GapTextContainer>emptyList());
+    @WithMockUser
+    void getAllContainers_shouldReturnApiErrorAndStatus404_whenCreatorNotExist() throws Exception {
+        var expectedErrorMessage = GapTextFactory.getErrorMessageContainerCreatorNotExist();
+        var creator = SecurityFactory
+                .ofUserInDb()
+                .username();
 
-        mockMvc.perform(get(apiUrl))
-                .andExpect(status().isOk())
-                .andExpect(content().json(emptyListAsJson));
+        var url = apiUrlAll + "/" + creator;
+        mockMvc.perform(get(url))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages").value(expectedErrorMessage));
     }
 
     @Test
-    void addContainer_shouldReturn403_whenNotLoggedIn() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+    @WithMockUser
+    void getAllContainers_shouldReturnEmptyList_whenRepoIsEmpty() throws Exception {
+        var emptyListAsJson = mapper.writeValueAsString(Collections.<GapTextContainer>emptyList());
+        var userToAdd = SecurityFactory.ofUserInDb();
+        var creator = userToAdd.username();
+        repo.save(userToAdd);
 
-        mockMvc.perform(post(apiUrl)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(newCreateDtoAsJson))
-                .andExpect(status().isForbidden());
+        var url = apiUrlAll + "/" + creator;
+        mockMvc.perform(get(url))
+                .andExpect(status().isOk())
+                .andExpect(content().json(emptyListAsJson));
     }
 
     @Test
@@ -78,11 +90,28 @@ class GapTextContainerIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
-        mockMvc.perform(get(apiUrl)
+        var claims = jwtService.validateToken(token);
+        var actualCreator = claims.getSubject();
+        var expectedCreator = userToAdd.username();
+        assertEquals(expectedCreator, actualCreator);
+
+        var url = apiUrlAll + "/" + actualCreator;
+        mockMvc.perform(get(url)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void addContainer_shouldReturn403_whenNotLoggedIn() throws Exception {
+        var newCreateDTO = GapTextFactory.ofCreateDTO();
+        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+
+        mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newCreateDtoAsJson))
+                .andExpect(status().isForbidden());
     }
 
     @Test

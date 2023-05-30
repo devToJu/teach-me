@@ -7,12 +7,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
 import java.util.Collections;
+import java.util.Optional;
 
 public class SecurityFactory {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Argon2PasswordEncoder encoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
 
-    static final String username = "test";
+    public static final String username = "test";
     static final String pw = "test";
 
     static final String errorBadCredentials = "Authentication request rejected: Bad credentials";
@@ -26,6 +27,11 @@ public class SecurityFactory {
     public static UserInDb ofUserInDb() {
         var pwHash = encoder.encode(SecurityFactory.pw);
         return new UserInDb("id", username, pwHash);
+    }
+
+    public static Optional<UserInDb> ofUserInDbAsOptional() {
+        var userInDb = ofUserInDb();
+        return Optional.of(userInDb);
     }
 
     static User ofUser() {

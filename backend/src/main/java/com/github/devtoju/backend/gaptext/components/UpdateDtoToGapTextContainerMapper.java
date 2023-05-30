@@ -14,6 +14,7 @@ public class UpdateDtoToGapTextContainerMapper implements Function<GapTextContai
         return new GapTextContainer(
                 updateDTO.id(),
                 updateDTO.description(),
-                updateDTO.gapTexts());
+                updateDTO.gapTexts(),
+                updateDTO.creator());
     }
 }

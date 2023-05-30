@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/gaptextcontainer")
+@RequestMapping("/api/gaptext")
 @RequiredArgsConstructor
 public class GapTextContainerController {
     private final GapTextContainerService gapTextContainerService;
 
-    @GetMapping
-    public List<GapTextContainer> getAllContainers() {
-        return gapTextContainerService.getAllContainers();
+    @GetMapping("/all/{creator}")
+    public List<GapTextContainer> getAllContainers(@PathVariable String creator) {
+        return gapTextContainerService.getAllContainers(creator);
     }
 
     @GetMapping("/{id}")

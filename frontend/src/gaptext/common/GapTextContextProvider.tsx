@@ -7,6 +7,7 @@ import {GapTextModel} from "../models/GapTextModel";
 import {AuthContext} from "../../security/common/AuthContext";
 import {Run} from "../../components/models/CallbackTypes";
 import {useMessageHandling} from "../../components/common/useMessageHandling";
+import {stringIsBlank} from "../../components/common/StringUtils";
 
 export type LoadByIdSuccessCallback = (description: string, gapTexts: GapTextModel[]) => void
 
@@ -15,17 +16,22 @@ type Props = {
 }
 
 export default function GapTextContextProvider({children}: Props) {
-    const {authHeader} = useContext(AuthContext)
+    const {username, authHeader} = useContext(AuthContext)
     const {showAxiosError, showSuccess} = useMessageHandling()
 
     const [gapTextContainers, setGapTextContainers] = useState<GapTextContainerModel[]>([])
-    const apiUrl: string = "/api/gaptextcontainer"
+    const apiUrl: string = "/api/gaptext"
 
     const loadAllGapTextContainers = useCallback(() => {
-        axios.get(apiUrl, authHeader)
+        if (stringIsBlank(username)) {
+            return
+        }
+
+        const url = apiUrl + "/all/" + username
+        axios.get(url, authHeader)
             .then(response => setGapTextContainers(response.data))
             .catch(reason => showAxiosError(reason))
-    }, [authHeader, showAxiosError])
+    }, [authHeader, username, showAxiosError])
 
     const loadGapTextContainerById = useCallback((id: string, successCallback: LoadByIdSuccessCallback) => {
         axios.get(apiUrl + "/" + id, authHeader)

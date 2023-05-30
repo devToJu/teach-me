@@ -10,7 +10,8 @@ public record GapTextContainer(
         @Id
         String id,
         String description,
-        List<GapText> gapTexts
+        List<GapText> gapTexts,
+        String creator
 ) {
     /**
      * Creates a copy of the current gap text container
@@ -19,6 +20,6 @@ public record GapTextContainer(
      * @return A new instance with the same attributes except for the ID
      */
     public GapTextContainer copy(String newId) {
-        return new GapTextContainer(newId, description, gapTexts);
+        return new GapTextContainer(newId, description, gapTexts, creator);
     }
 }

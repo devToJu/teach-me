@@ -2,6 +2,7 @@ package com.github.devtoju.backend.gaptext;
 
 import com.github.devtoju.backend.gaptext.models.GapText;
 import com.github.devtoju.backend.gaptext.models.*;
+import com.github.devtoju.backend.security.SecurityFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,6 +14,7 @@ public class GapTextFactory {
     static String emptyDescription = "";
     static String updatedDescription = "updated description";
     static String id = "testId";
+    static String creator = SecurityFactory.username;
 
     /**
      * Instantiate container with four text items
@@ -20,7 +22,7 @@ public class GapTextFactory {
      * @return A new gap text container
      */
     public static GapTextContainer ofGapTextContainer() {
-        return new GapTextContainer(id, description, createTexts());
+        return new GapTextContainer(id, description, createTexts(), creator);
     }
 
     /**
@@ -29,7 +31,7 @@ public class GapTextFactory {
      * @return A new gap text container
      */
     public static GapTextContainer ofGapTextContainerUpdated(String id) {
-        return new GapTextContainer(id, updatedDescription, createTexts());
+        return new GapTextContainer(id, updatedDescription, createTexts(), creator);
     }
 
     /**
@@ -38,7 +40,7 @@ public class GapTextFactory {
      * @return A new gap text container create DTO
      */
     public static GapTextContainerCreateDTO ofCreateDTO() {
-        return new GapTextContainerCreateDTO(description, createTexts());
+        return new GapTextContainerCreateDTO(description, createTexts(), creator);
     }
 
     /**
@@ -47,7 +49,7 @@ public class GapTextFactory {
      * @return A new gap text container create DTO
      */
     public static GapTextContainerCreateDTO ofCreateDtoWithEmptyDescription() {
-        return new GapTextContainerCreateDTO(emptyDescription, createTexts());
+        return new GapTextContainerCreateDTO(emptyDescription, createTexts(), creator);
     }
 
     /**
@@ -57,7 +59,7 @@ public class GapTextFactory {
      * @return A new gap text container create DTO
      */
     public static GapTextContainerCreateDTO ofCreateDtoWhereDescriptionAndGapTextsAreEmpty() {
-        return new GapTextContainerCreateDTO(emptyDescription, Collections.emptyList());
+        return new GapTextContainerCreateDTO(emptyDescription, Collections.emptyList(), creator);
     }
 
     /**
@@ -66,7 +68,7 @@ public class GapTextFactory {
      * @return A new gap text container update DTO
      */
     public static GapTextContainerUpdateDTO ofUpdateDTO() {
-        return new GapTextContainerUpdateDTO(id, updatedDescription, createTexts());
+        return new GapTextContainerUpdateDTO(id, updatedDescription, createTexts(), creator);
     }
 
     /**
@@ -75,7 +77,7 @@ public class GapTextFactory {
      * @return A new gap text container update DTO
      */
     public static GapTextContainerUpdateDTO ofUpdateDTO(String id) {
-        return new GapTextContainerUpdateDTO(id, updatedDescription, createTexts());
+        return new GapTextContainerUpdateDTO(id, updatedDescription, createTexts(), creator);
     }
 
     /**
@@ -153,6 +155,15 @@ public class GapTextFactory {
                 "URL ID: 'otherId'",
                 "Container ID: 'testId'"
         };
+    }
+
+    /**
+     * Creates an error message when the gap text creator does not exist
+     *
+     * @return error message
+     */
+    public static String getErrorMessageContainerCreatorNotExist() {
+        return "Could not get gap texts containers: Creator '" + creator + "' does not exist!";
     }
 
     private static List<GapText> createTexts() {

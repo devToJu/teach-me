@@ -17,6 +17,7 @@ public class CreateDtoToGapTextContainerMapper implements Function<GapTextContai
         return new GapTextContainer(
                 idService.createUniqueId(),
                 createDTO.description(),
-                createDTO.gapTexts());
+                createDTO.gapTexts(),
+                createDTO.creator());
     }
 }

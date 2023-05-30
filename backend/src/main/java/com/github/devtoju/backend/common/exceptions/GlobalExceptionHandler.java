@@ -2,7 +2,6 @@ package com.github.devtoju.backend.common.exceptions;
 
 import com.github.devtoju.backend.gaptext.exceptions.*;
 import com.github.devtoju.backend.security.common.UserInDbAuthException;
-import com.github.devtoju.backend.security.jwt.JwtAuthSecurityException;
 import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.validation.FieldError;
@@ -35,16 +34,18 @@ public class GlobalExceptionHandler {
         return createResponseEntity(messages, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    @ExceptionHandler(GapTextContainerCreatorNotExistException.class)
+    public ResponseEntity<ApiError> handleGapTextContainerCreatorNotExistException(
+            GapTextContainerCreatorNotExistException e
+    ) {
+        var messages = List.of(e.getMessage());
+        return createResponseEntity(messages, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         var messages = createValidationErrorMessages(e);
         return createResponseEntity(messages, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(JwtAuthSecurityException.class)
-    public ResponseEntity<ApiError> handleJwtAuthSecurityException(JwtAuthSecurityException e) {
-        var messages = List.of(e.getMessage());
-        return createResponseEntity(messages, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(UserInDbAuthException.class)
