@@ -49,7 +49,21 @@ class GapTextContainerIntegrationTest {
     }
 
     @Test
-    @WithMockUser()
+    @WithMockUser
+    void getAllContainers_shouldReturnApiErrorAndStatus404_whenCreatorNotExist() throws Exception {
+        var expectedErrorMessage = GapTextFactory.getErrorMessageContainerCreatorNotExist();
+        var creator = SecurityFactory
+                .ofUserInDb()
+                .username();
+
+        var url = apiUrlAll + "/" + creator;
+        mockMvc.perform(get(url))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.messages").value(expectedErrorMessage));
+    }
+
+    @Test
+    @WithMockUser
     void getAllContainers_shouldReturnEmptyList_whenRepoIsEmpty() throws Exception {
         var emptyListAsJson = mapper.writeValueAsString(Collections.<GapTextContainer>emptyList());
         var userToAdd = SecurityFactory.ofUserInDb();

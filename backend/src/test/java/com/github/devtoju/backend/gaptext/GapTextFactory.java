@@ -2,6 +2,7 @@ package com.github.devtoju.backend.gaptext;
 
 import com.github.devtoju.backend.gaptext.models.GapText;
 import com.github.devtoju.backend.gaptext.models.*;
+import com.github.devtoju.backend.security.SecurityFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,7 +14,7 @@ public class GapTextFactory {
     static String emptyDescription = "";
     static String updatedDescription = "updated description";
     static String id = "testId";
-    static String creator = "creator";
+    static String creator = SecurityFactory.username;
 
     /**
      * Instantiate container with four text items

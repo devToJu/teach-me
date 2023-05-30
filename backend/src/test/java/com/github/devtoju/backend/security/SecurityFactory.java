@@ -13,7 +13,7 @@ public class SecurityFactory {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Argon2PasswordEncoder encoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
 
-    static final String username = "test";
+    public static final String username = "test";
     static final String pw = "test";
 
     static final String errorBadCredentials = "Authentication request rejected: Bad credentials";
