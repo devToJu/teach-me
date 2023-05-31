@@ -34,7 +34,7 @@ export default function GapTextCard(props: Props) {
                     Gap Text #{number}
                 </Typography>
                 <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                    {gapText.id}
+                    Creator: {gapText.creator}
                 </Typography>
                 <Divider sx={{mt: 2, mb: 2}}/>
                 <Typography sx={{mb: 1.5}} color="text.primary">
