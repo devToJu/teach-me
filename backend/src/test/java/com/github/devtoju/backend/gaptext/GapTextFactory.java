@@ -44,11 +44,20 @@ public class GapTextFactory {
     }
 
     /**
+     * Instantiate a corrupt container without creator
+     *
+     * @return A new gap text container create DTO
+     */
+    public static GapTextContainerCreateDTO ofInvalidCreateDtoWithoutCreator() {
+        return new GapTextContainerCreateDTO(description, createTexts(), "");
+    }
+
+    /**
      * Instantiate a container with four text items and an empty description
      *
      * @return A new gap text container create DTO
      */
-    public static GapTextContainerCreateDTO ofCreateDtoWithEmptyDescription() {
+    public static GapTextContainerCreateDTO ofInvalidCreateDtoWithoutDescription() {
         return new GapTextContainerCreateDTO(emptyDescription, createTexts(), creator);
     }
 
@@ -58,7 +67,7 @@ public class GapTextFactory {
      *
      * @return A new gap text container create DTO
      */
-    public static GapTextContainerCreateDTO ofCreateDtoWhereDescriptionAndGapTextsAreEmpty() {
+    public static GapTextContainerCreateDTO ofInvalidCreateDtoWithoutDescriptionAndGapTexts() {
         return new GapTextContainerCreateDTO(emptyDescription, Collections.emptyList(), creator);
     }
 
@@ -81,6 +90,15 @@ public class GapTextFactory {
     }
 
     /**
+     * Instantiate a container with an updated description
+     *
+     * @return A new gap text container update DTO
+     */
+    public static GapTextContainerUpdateDTO ofInvalidUpdateDtoWithoutCreator() {
+        return new GapTextContainerUpdateDTO(id, updatedDescription, createTexts(), "");
+    }
+
+    /**
      * Creates an error message when the description attribute is not valid
      *
      * @return error message
@@ -100,6 +118,17 @@ public class GapTextFactory {
         return "Violate constraint 'Size' at '" +
                 GapTextContainerCreateDTO.class.getSimpleName() +
                 ".gapTexts': size must be between 2 and 6";
+    }
+
+    /**
+     * Creates an error message when the creator attribute is not valid
+     *
+     * @return error message
+     */
+    public static String getErrorMessageEmptyCreator(ContainerBase container) {
+        return "Violate constraint 'NotBlank' at '" +
+                container.getClass().getSimpleName() +
+                ".creator': must not be blank";
     }
 
     /**
