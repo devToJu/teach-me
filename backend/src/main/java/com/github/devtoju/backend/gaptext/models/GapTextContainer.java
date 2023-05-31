@@ -12,7 +12,7 @@ public record GapTextContainer(
         String description,
         List<GapText> gapTexts,
         String creator
-) {
+) implements ContainerBase {
     /**
      * Creates a copy of the current gap text container
      *

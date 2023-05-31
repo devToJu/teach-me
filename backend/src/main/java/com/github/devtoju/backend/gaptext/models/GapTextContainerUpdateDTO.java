@@ -15,5 +15,5 @@ public record GapTextContainerUpdateDTO(
         List<GapText> gapTexts,
         @NotBlank
         String creator
-) {
+) implements ContainerBase {
 }

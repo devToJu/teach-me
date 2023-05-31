@@ -7,9 +7,11 @@ import {useGapTexts} from "./useGapTexts";
 import {useParams} from "react-router-dom";
 import {Run} from "../../components/models/CallbackTypes";
 import {useMessageHandling} from "../../components/common/useMessageHandling";
+import {AuthContext} from "../../security/common/AuthContext";
 
 export function useGapTextContainer() {
     const {loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer} = useContext(GapTextContext)
+    const {username} = useContext(AuthContext)
     const {gapTexts, setGapTexts, addEmptyRow, removeRow, updateRow} = useGapTexts()
     const {showError} = useMessageHandling()
     const [description, setDescription] = useState<string>("")
@@ -39,7 +41,8 @@ export function useGapTextContainer() {
     const saveContainer = (finishedCallback: Run) => {
         const containerDTO: GapTextContainerDtoModel = {
             gapTexts: gapTexts,
-            description: description
+            description: description,
+            creator: username
         }
 
         saveGapTextContainer(containerDTO, clearContainer)
@@ -56,7 +59,8 @@ export function useGapTextContainer() {
         const updateContainer: GapTextContainerModel = {
             id: id,
             description: description,
-            gapTexts: gapTexts
+            gapTexts: gapTexts,
+            creator: username
         }
 
         updateGapTextContainer(updateContainer)

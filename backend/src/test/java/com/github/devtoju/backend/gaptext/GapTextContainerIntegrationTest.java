@@ -140,7 +140,7 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser
     void addContainer_shouldReturnApiErrorAndStatusIsBadRequest_whenDescriptionIsEmpty() throws Exception {
-        var invalidCreateDTO = GapTextFactory.ofCreateDtoWithEmptyDescription();
+        var invalidCreateDTO = GapTextFactory.ofInvalidCreateDtoWithoutDescription();
         var invalidCreateDtoAsJson = mapper.writeValueAsString(invalidCreateDTO);
         var errorMessage = GapTextFactory.getErrorMessageEmptyDescription();
 
@@ -155,7 +155,7 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser
     void addContainer_shouldReturnApiErrorAndStatusIsBadRequest_whenDescriptionAndGapTextsAreEmpty() throws Exception {
-        var invalidCreateDTO = GapTextFactory.ofCreateDtoWhereDescriptionAndGapTextsAreEmpty();
+        var invalidCreateDTO = GapTextFactory.ofInvalidCreateDtoWithoutDescriptionAndGapTexts();
         var invalidCreateDtoAsJson = mapper.writeValueAsString(invalidCreateDTO);
 
         String[] errorMessages = {
@@ -169,6 +169,21 @@ class GapTextContainerIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
                 .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(errorMessages)));
+    }
+
+    @Test
+    @WithMockUser
+    void addContainer_shouldReturnApiErrorAndStatus400_whenCreatorIsEmpty() throws Exception {
+        var invalidCreateDto = GapTextFactory.ofInvalidCreateDtoWithoutCreator();
+        var invalidCreateDtoAsJson = mapper.writeValueAsString(invalidCreateDto);
+        var expectedErrorMessage = GapTextFactory.getErrorMessageEmptyCreator(invalidCreateDto);
+
+        mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidCreateDtoAsJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andExpect(jsonPath("$.messages").value(expectedErrorMessage));
     }
 
     @Test
@@ -299,6 +314,21 @@ class GapTextContainerIntegrationTest {
                         .content(updateDtoAsJson))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.messages", Matchers.containsInAnyOrder(errorMessages)));
+    }
+
+    @Test
+    @WithMockUser
+    void updateContainer_shouldReturnApiErrorAndStatus400_whenCreatorIsEmpty() throws Exception {
+        var invalidUpdateDTO = GapTextFactory.ofInvalidUpdateDtoWithoutCreator();
+        var invalidUpdateDtoAsJson = mapper.writeValueAsString(invalidUpdateDTO);
+        var expectedErrorMessage = GapTextFactory.getErrorMessageEmptyCreator(invalidUpdateDTO);
+        var url = apiUrl + "/" + invalidUpdateDTO.id();
+
+        mockMvc.perform(put(url, invalidUpdateDTO)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidUpdateDtoAsJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.messages").value(expectedErrorMessage));
     }
 
     @Test
