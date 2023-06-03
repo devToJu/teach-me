@@ -105,8 +105,7 @@ class GapTextContainerIntegrationTest {
 
     @Test
     void addContainer_shouldReturn403_whenNotLoggedIn() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+        var newCreateDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -117,8 +116,7 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser
     void addContainer_shouldReturnAddedContainer() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+        var newCreateDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         String responseString = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,12 +127,12 @@ class GapTextContainerIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
-        var actual = mapper.readValue(responseString, GapTextContainer.class);
-        var expected = GapTextFactory
+        var actualGapTextContainer = mapper.readValue(responseString, GapTextContainer.class);
+        var expectedGapTextContainer = GapTextFactory
                 .ofGapTextContainer()
-                .copy(actual.id());
+                .copy(actualGapTextContainer.id());
 
-        assertEquals(expected, actual);
+        assertEquals(expectedGapTextContainer, actualGapTextContainer);
     }
 
     @Test
@@ -189,8 +187,7 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser
     void addContainer_shouldContainsDifferentIds_whenCalledTwice() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+        var newCreateDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         var responseBodyOneAsJson = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -210,15 +207,14 @@ class GapTextContainerIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
-        var actualOne = mapper.readValue(responseBodyOneAsJson, GapTextContainer.class);
-        var actualTwo = mapper.readValue(responseBodyTwoAsJson, GapTextContainer.class);
-        assertNotEquals(actualOne.id(), actualTwo.id());
+        var gapTextContainerOne = mapper.readValue(responseBodyOneAsJson, GapTextContainer.class);
+        var gapTextContainerTwo = mapper.readValue(responseBodyTwoAsJson, GapTextContainer.class);
+        assertNotEquals(gapTextContainerOne.id(), gapTextContainerTwo.id());
     }
 
     @Test
     void getContainerById_shouldReturnStatus403_whenNotLoggedIn() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+        var newCreateDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -229,8 +225,7 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser
     void getContainerById_shouldReturnContainer_whenIdExist() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+        var newCreateDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         var addedContainerAsJson = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -263,8 +258,7 @@ class GapTextContainerIntegrationTest {
 
     @Test
     void updateContainer_shouldReturnStatus403_whenNotLoggedIn() throws Exception {
-        var createDTO = GapTextFactory.ofCreateDTO();
-        var createDtoAsJson = mapper.writeValueAsString(createDTO);
+        var createDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -275,8 +269,7 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser
     void updateContainer_shouldReturnUpdatedContainer() throws Exception {
-        var createDTO = GapTextFactory.ofCreateDTO();
-        var createDtoAsJson = mapper.writeValueAsString(createDTO);
+        var createDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         var responseBodyAsJson = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -292,9 +285,9 @@ class GapTextContainerIntegrationTest {
 
         var updateDTO = GapTextFactory.ofUpdateDTO(addedId);
         var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
-        var urlId = "/" + updateDTO.id();
+        var url = apiUrl + "/" + addedId;
 
-        mockMvc.perform(put(apiUrl + urlId, updateDTO)
+        mockMvc.perform(put(url, updateDTO)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateDtoAsJson))
                 .andExpect(status().isOk())
@@ -307,9 +300,9 @@ class GapTextContainerIntegrationTest {
         var updateDTO = GapTextFactory.ofUpdateDTO();
         var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
         var errorMessages = GapTextFactory.getErrorMessagesIdIsBlank();
-        var invalidUrlId = "/ ";
+        var invalidUrl = apiUrl + "/ ";
 
-        mockMvc.perform(put(apiUrl + invalidUrlId, updateDTO)
+        mockMvc.perform(put(invalidUrl, updateDTO)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateDtoAsJson))
                 .andExpect(status().isUnprocessableEntity())
@@ -337,9 +330,9 @@ class GapTextContainerIntegrationTest {
         var updateDTO = GapTextFactory.ofUpdateDTO();
         var updateDtoAsJson = mapper.writeValueAsString(updateDTO);
         var errorMessages = GapTextFactory.getErrorMessagesIdsAreNotEquals();
-        var otherUrlId = "/otherId";
+        var invalidUrl = apiUrl + "/otherId";
 
-        mockMvc.perform(put(apiUrl + otherUrlId, updateDTO)
+        mockMvc.perform(put(invalidUrl, updateDTO)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateDtoAsJson))
                 .andExpect(status().isUnprocessableEntity())
@@ -372,8 +365,7 @@ class GapTextContainerIntegrationTest {
     @Test
     @WithMockUser
     void deleteContainer_shouldReturnApiErrorAndStatus204_whenIdExist() throws Exception {
-        var newCreateDTO = GapTextFactory.ofCreateDTO();
-        var newCreateDtoAsJson = mapper.writeValueAsString(newCreateDTO);
+        var newCreateDtoAsJson = GapTextFactory.ofCreateDtoAsJson();
 
         var addedContainerAsJson = mockMvc.perform(post(apiUrl)
                         .contentType(MediaType.APPLICATION_JSON)

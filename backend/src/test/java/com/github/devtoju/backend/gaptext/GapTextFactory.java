@@ -1,5 +1,7 @@
 package com.github.devtoju.backend.gaptext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.devtoju.backend.gaptext.models.GapText;
 import com.github.devtoju.backend.gaptext.models.*;
 import com.github.devtoju.backend.security.SecurityFactory;
@@ -9,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class GapTextFactory {
+
+    private final static ObjectMapper mapper = new ObjectMapper();
 
     static String description = "to clean, to ring";
     static String emptyDescription = "";
@@ -41,6 +45,16 @@ public class GapTextFactory {
      */
     public static GapTextContainerCreateDTO ofCreateDTO() {
         return new GapTextContainerCreateDTO(description, createTexts(), creator);
+    }
+
+    /**
+     * Create a JSON-String of Create DTO
+     * @return Create DTO as JSON-String
+     * @throws JsonProcessingException when couldn't parse DTO to JSON
+     */
+    public static String ofCreateDtoAsJson() throws JsonProcessingException {
+        var container = ofCreateDTO();
+        return mapper.writeValueAsString(container);
     }
 
     /**
