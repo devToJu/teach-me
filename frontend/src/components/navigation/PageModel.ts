@@ -11,3 +11,4 @@ export type PageModelGroup = {
 export const urlGapText : string = "/gaptext"
 export const urlGapTextCreate: string = "/gaptext/create"
 export const urlLogin: string = "/signin"
+export const urlTaskCreate: string = "/task"
