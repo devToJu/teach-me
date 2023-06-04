@@ -1,13 +1,13 @@
 import {useContext, useEffect, useRef, useState} from "react";
 import {GapTextContext} from "./GapTextContext";
-import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
-import {GapTextContainerModel} from "../models/GapTextContainerModel";
+import {GapTextContainerCreateDtoModel} from "../models/GapTextContainerCreateDtoModel";
 import {GapTextModel} from "../models/GapTextModel";
 import {useGapTexts} from "./useGapTexts";
 import {useParams} from "react-router-dom";
 import {Run} from "../../components/models/CallbackTypes";
 import {useMessageHandling} from "../../components/common/useMessageHandling";
 import {AuthContext} from "../../security/common/AuthContext";
+import {GapTextContainerUpdateDtoModel} from "../models/GapTextContainerUpdateDtoModel";
 
 export function useGapTextContainer() {
     const {loadGapTextContainerById, saveGapTextContainer, updateGapTextContainer} = useContext(GapTextContext)
@@ -39,7 +39,7 @@ export function useGapTextContainer() {
     }
 
     const saveContainer = (finishedCallback: Run) => {
-        const containerDTO: GapTextContainerDtoModel = {
+        const containerDTO: GapTextContainerCreateDtoModel = {
             gapTexts: gapTexts,
             description: description,
             creator: username
@@ -56,7 +56,7 @@ export function useGapTextContainer() {
             return
         }
 
-        const updateContainer: GapTextContainerModel = {
+        const updateContainer: GapTextContainerUpdateDtoModel = {
             id: id,
             description: description,
             gapTexts: gapTexts,

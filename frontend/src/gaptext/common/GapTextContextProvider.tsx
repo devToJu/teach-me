@@ -2,12 +2,13 @@ import {ReactElement, useCallback, useContext, useMemo, useState} from "react";
 import axios from "axios";
 import {GapTextContainerModel} from "../models/GapTextContainerModel";
 import {GapTextContext, GapTextContextProviderValue} from "./GapTextContext"
-import {GapTextContainerDtoModel} from "../models/GapTextContainerDtoModel";
+import {GapTextContainerCreateDtoModel} from "../models/GapTextContainerCreateDtoModel";
 import {GapTextModel} from "../models/GapTextModel";
 import {AuthContext} from "../../security/common/AuthContext";
 import {Run} from "../../components/models/CallbackTypes";
 import {useMessageHandling} from "../../components/common/useMessageHandling";
 import {stringIsBlank} from "../../components/common/StringUtils";
+import {GapTextContainerUpdateDtoModel} from "../models/GapTextContainerUpdateDtoModel";
 
 export type LoadByIdSuccessCallback = (description: string, gapTexts: GapTextModel[]) => void
 
@@ -41,7 +42,7 @@ export default function GapTextContextProvider({children}: Props) {
     }, [authHeader, showAxiosError])
 
     const saveGapTextContainer = useCallback((
-        newContainerDTO: GapTextContainerDtoModel,
+        newContainerDTO: GapTextContainerCreateDtoModel,
         successCallback: Run
     ) => {
         axios.post(apiUrl, newContainerDTO, authHeader)
@@ -51,7 +52,7 @@ export default function GapTextContextProvider({children}: Props) {
             .catch(reason => showAxiosError(reason))
     }, [authHeader, showAxiosError, showSuccess])
 
-    const updateGapTextContainer = useCallback((container: GapTextContainerModel) => {
+    const updateGapTextContainer = useCallback((container: GapTextContainerUpdateDtoModel) => {
         const putUrl = apiUrl + "/" + container.id
         axios.put(putUrl, container, authHeader)
             .then(response =>

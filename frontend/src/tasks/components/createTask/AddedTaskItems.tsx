@@ -1,6 +1,7 @@
 import React from "react"
 import {List, ListSubheader} from "@mui/material"
 import AddedItem from "./AddedItem";
+import {Retrievable} from "../../../components/interfaces/Retrievable";
 
 const listStyle = {
     ml: 5,
@@ -16,7 +17,7 @@ const listStyle = {
     borderColor: "grey.400",
 }
 
-const items: string[] = ["1. Item", "2. Item", "3. Item"]
+const items: Retrievable[] =  []
 
 export default function AddedTaskItems() {
     return (
@@ -26,7 +27,7 @@ export default function AddedTaskItems() {
               }
         >
             {
-                items.map((item) => <AddedItem key={item} info={item}/>)
+                items.map((item) => <AddedItem key={item.id} info={item.getInfo()}/>)
             }
         </List>
     )

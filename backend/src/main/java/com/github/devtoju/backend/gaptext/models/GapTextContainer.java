@@ -23,14 +23,4 @@ public record GapTextContainer(
     public GapTextContainer copy(String newId) {
         return new GapTextContainer(newId, description, gapTexts, creator);
     }
-
-    @Override
-    public String getInfo() {
-            var gapTextOptional = gapTexts.stream().findFirst();
-            if (gapTextOptional.isEmpty()) {
-                return "No description found";
-            }
-
-            return gapTextOptional.get().value();
-    }
 }
