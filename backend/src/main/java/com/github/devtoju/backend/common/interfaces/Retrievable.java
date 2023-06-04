@@ -1,9 +1,9 @@
 package com.github.devtoju.backend.common.interfaces;
 
-public interface Informable {
+public interface Retrievable {
     /**
      * Get a short description of the item
-     * @return Information about the added item
+     * @return Information about the item
      */
     String getInfo();
 

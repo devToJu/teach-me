@@ -1,6 +1,6 @@
 package com.github.devtoju.backend.gaptext.models;
 
-import com.github.devtoju.backend.common.interfaces.Informable;
+import com.github.devtoju.backend.common.interfaces.Retrievable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +13,7 @@ public record GapTextContainer(
         String description,
         List<GapText> gapTexts,
         String creator
-) implements ContainerBase, Informable {
+) implements ContainerBase, Retrievable {
     /**
      * Creates a copy of the current gap text container
      *

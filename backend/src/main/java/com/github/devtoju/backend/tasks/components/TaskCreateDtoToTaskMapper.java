@@ -1,6 +1,6 @@
 package com.github.devtoju.backend.tasks.components;
 
-import com.github.devtoju.backend.common.interfaces.Informable;
+import com.github.devtoju.backend.common.interfaces.Retrievable;
 import com.github.devtoju.backend.common.services.IdService;
 import com.github.devtoju.backend.tasks.models.Task;
 import com.github.devtoju.backend.tasks.models.TaskCreateDto;
@@ -19,7 +19,7 @@ public class TaskCreateDtoToTaskMapper implements Function<TaskCreateDto, Task> 
         var id = idService.createUniqueId();
         var addedItemsIds = taskCreateDto.addedItems
                 .stream()
-                .map(Informable::id)
+                .map(Retrievable::id)
                 .toList();
 
         return new Task(
