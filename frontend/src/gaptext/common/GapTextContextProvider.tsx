@@ -29,8 +29,10 @@ export default function GapTextContextProvider({children}: Props) {
         }
 
         const url = apiUrl + "/all/" + username
-        axios.get(url, authHeader)
-            .then(response => setGapTextContainers(response.data))
+        axios.get<GapTextContainerModel[]>(url, authHeader)
+            .then(response => response.data)
+            .then(containers => containers.map(c => GapTextContainerModel.of(c)))
+            .then(result => setGapTextContainers(result))
             .catch(reason => showAxiosError(reason))
     }, [authHeader, username, showAxiosError])
 
@@ -46,20 +48,26 @@ export default function GapTextContextProvider({children}: Props) {
         successCallback: Run
     ) => {
         axios.post(apiUrl, newContainerDTO, authHeader)
-            .then(response => setGapTextContainers(prevState => [...prevState, response.data]))
+            .then(response => response.data)
+            .then(data => GapTextContainerModel.of(data))
+            .then(container => setGapTextContainers(prevState => [...prevState, container]))
             .then(() => showSuccess("Gap Text saved successfully!"))
             .then(successCallback)
             .catch(reason => showAxiosError(reason))
     }, [authHeader, showAxiosError, showSuccess])
 
-    const updateGapTextContainer = useCallback((container: GapTextContainerUpdateDtoModel) => {
-        const putUrl = apiUrl + "/" + container.id
-        axios.put(putUrl, container, authHeader)
-            .then(response =>
+    const updateGapTextContainer = useCallback((updateContainer: GapTextContainerUpdateDtoModel) => {
+        const putUrl = apiUrl + "/" + updateContainer.id
+        axios.put(putUrl, updateContainer, authHeader)
+            .then(response => response.data)
+            .then(data => GapTextContainerModel.of(data))
+            .then(newContainer =>
                 setGapTextContainers(prevState =>
-                    prevState.map(item => {
-                        return item.id === container.id ? response.data : item
-                    })
+                    prevState.map(container =>
+                        container.id === updateContainer.id ?
+                            newContainer :
+                            container
+                    )
                 )
             )
             .then(() => showSuccess("Gap Text updated successfully!"))

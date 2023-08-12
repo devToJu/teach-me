@@ -4,8 +4,6 @@ import AddedItem from "./AddedItem";
 import {Retrievable} from "../../../components/interfaces/Retrievable";
 
 const listStyle = {
-    ml: 5,
-    mr: 5,
     width: '100%',
     height: "100%",
     minHeight: 100,
@@ -17,9 +15,11 @@ const listStyle = {
     borderColor: "grey.400",
 }
 
-const items: Retrievable[] =  []
+type Props = {
+    items: Retrievable[]
+}
 
-export default function AddedTaskItems() {
+export default function AddedTaskItems(props: Props) {
     return (
         <List sx={listStyle}
               subheader={
@@ -27,7 +27,7 @@ export default function AddedTaskItems() {
               }
         >
             {
-                items.map((item) => <AddedItem key={item.id} info={item.getInfo()}/>)
+                props.items.map(item => <AddedItem key={item.id} info={item.getInfo()}/>)
             }
         </List>
     )

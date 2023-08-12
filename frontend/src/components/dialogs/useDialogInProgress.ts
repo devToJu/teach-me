@@ -1,15 +1,7 @@
-import {useState} from "react";
+import {useShowDialog} from "./useShowDialog";
 
 export function useDialogInProgress() {
-    const [isOpen, setIsOpen] = useState(false)
-
-    const openDialog = () => {
-        setIsOpen(true)
-    }
-
-    const closeDialog = () => {
-        setIsOpen(false)
-    }
+    const {isOpen, openDialog, closeDialog} = useShowDialog()
 
     return {isOpen, openDialog, closeDialog}
 }

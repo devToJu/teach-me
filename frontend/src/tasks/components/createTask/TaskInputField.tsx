@@ -3,8 +3,6 @@ import React from "react";
 import {Consumer} from "../../../components/models/CallbackTypes";
 
 const textFieldStyle = {
-    ml: 5,
-    mr: 5,
     mb: 2
 }
 

@@ -11,11 +11,23 @@ export class GapTextContainerModel extends GapTextContainerCreateDtoModel implem
     }
 
     getInfo(): string {
-        const gapText = this.gapTexts[0]
-        if (gapText === undefined) {
-            return "No info found..."
-        }
+        return (this.gapTexts.length < 1) ?
+            "No info found..." :
+            this.gapTexts
+                .map(gapText => gapText.value)
+                .join(" ")
+    }
 
-        return gapText.value
+    /**
+     * Creates a GapTextContainerModel instance
+     * @param container A type of GapTextContainerModel or a JS-object
+     * @return a new GapTextContainerModel instance
+     */
+    static of(container: GapTextContainerModel): GapTextContainerModel {
+        return new GapTextContainerModel(
+            container.description,
+            container.gapTexts,
+            container.creator,
+            container.id)
     }
 }
